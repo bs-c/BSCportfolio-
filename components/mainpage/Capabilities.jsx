@@ -1,6 +1,6 @@
 import { Cpu, Hammer, Globe, Ruler, MoveRight } from "lucide-react"; // 記得引入 Ruler
 
-export default function Capabilities() {
+export default function Capabilities({ SectionTitle }) {
   const services = [
     {
       title: "Structural Design",
@@ -46,24 +46,17 @@ export default function Capabilities() {
   return (
     <section className="py-20" id="services">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-end gap-4 mb-12">
-          <span className="text-cyan-500 font-mono text-sm tracking-widest">
-            02.
-          </span>
-          <h2 className="text-3xl font-bold text-white">WHAT I DO</h2>
-        </div>
+        <SectionTitle number="2" title="Capabilities" subtitle="WHAT I DO" />
 
-        <h3 className="text-4xl md:text-5xl font-bold text-white mb-16">
-          Capabilities
-        </h3>
-
-        {/* 🔥 修改這裡：改為 md:grid-cols-2 (2x2 矩陣) */}
+        {/* 修改這裡：改為 md:grid-cols-2 (2x2 矩陣) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {services.map((service, index) => (
             <div
               key={index}
-              className="group p-8 bg-slate-950/50 border border-slate-800 hover:border-slate-600 transition-all duration-300 rounded-lg hover:-translate-y-1"
+              className="group p-8 bg-slate-950/50 border border-slate-800 hover:border-slate-600 transition-all duration-300 rounded-lg hover:-translate-y-1 flex flex-col h-full"
             >
+              {/* ⬆️ 修正點 1: 加入 flex flex-col h-full，讓內部元件垂直排列並撐滿高度 */}
+
               {/* Icon */}
               <div className={`mb-6 ${service.color}`}>{service.icon}</div>
 
@@ -73,22 +66,26 @@ export default function Capabilities() {
               </h4>
 
               {/* Description */}
-              <p className="text-slate-400 leading-relaxed mb-6 h-20">
+              <p className="text-slate-400 leading-relaxed mb-6 md:min-h-[5rem]">
+                {/* ⬆️ 修正點 2: 
+        - 移除了原本的 h-20 
+        - 改用 md:min-h-[5rem] (只在電腦版保留最小高度以維持整齊)
+        - 手機版會自動變成 auto，文字再長也不會重疊 
+    */}
                 {service.description}
               </p>
 
-              {/* Arrow Hint (Optional) */}
-              <div className="flex items-center gap-2 text-sm font-mono text-slate-600 group-hover:text-cyan-400 transition-colors">
-                <div className="flex flex-wrap gap-2 mt-auto">
-                  {service.tools.map((tool, i) => (
-                    <span
-                      key={i}
-                      className="text-[10px] font-mono px-1.5 py-0.5 rounded border border-slate-700 text-slate-500 bg-slate-900"
-                    >
-                      {tool}
-                    </span>
-                  ))}
-                </div>
+              {/* Tools Tags (原本的 Details) */}
+              <div className="flex flex-wrap gap-2 mt-auto">
+                {/* ⬆️ 修正點 3: mt-auto 會自動填補中間的空白，把這一塊推到最下面 */}
+                {service.tools.map((tool, i) => (
+                  <span
+                    key={i}
+                    className="text-[10px] font-mono px-1.5 py-0.5 rounded border border-slate-700 text-slate-500 bg-slate-900 group-hover:border-slate-600 transition-colors"
+                  >
+                    {tool}
+                  </span>
+                ))}
               </div>
             </div>
           ))}

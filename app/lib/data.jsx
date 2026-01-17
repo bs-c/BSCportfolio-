@@ -20,45 +20,75 @@ export const projectsData = [
       "Automated the generation of structural analysis models",
     ],
     tech: ["Python", "CSI OAPI", "Excel"],
-    demoVideo: "https://youtu.be/crL5hKoKt7Q",
+    demoVideo: ["https://youtu.be/crL5hKoKt7Q"],
     link: "https://youtu.be/crL5hKoKt7Q",
     github: null,
     status: "INTERNAL_TOOL",
     images: [
       {
         src: "/projects/ExcelToSAP2000byOAPI/ExcelToSAP2000byOAPI-1.png",
-        caption: "FIG_01: DASHBOARD_UI",
+        caption: "FIG_01: Demo Screenshot",
       },
-      {
-        src: "/projects/ExcelToSAP2000byOAPI/ExcelToSAP2000byOAPI-1.png",
-        caption: "FIG_01: DASHBOARD_UI",
-      },
-    ], // 預留圖片欄位
+    ],
   },
   {
-    id: "parametric-truss",
-    title: "Parametric Truss Analysis",
-    cover: "/projects/ExcelToSAP2000byOAPI/ExcelToSAP2000byOAPI-1.png",
-    category: "CIVIL",
+    id: "Inspection-System",
+    title: "Construction Inspection Management System",
+    cover: "/projects/InspectionSystem/Inspection-System-1.png",
+    category: "HYBRID",
     subtitle:
-      "Master's Thesis: Computational optimization for curved geometries",
+      "Streamlining site inspections via Python & LINE Bot integration for real-time stakeholder synchronization.",
     description:
-      "An automated tool designed to solve the complexity of modeling free-form grid shells...",
+      "Digitizing construction management by converting manual workflows into a transparent, standardized system...",
     challenge:
-      "Manual modeling of complex curves takes days and is prone to human error.",
+      "Traditional construction projects often suffer from procedural non-compliance and information silos. Contractors frequently bypass standard inspection protocols, causing scheduling conflicts for supervisors. Meanwhile, owners and project managers lack a transparent channel to track inspection progress, leading to information asymmetry and inefficient decision-making.",
     solution:
-      "Built a Grasshopper-Python script that generates geometry based on mathematical functions...",
+      "An automated inspection hub driven by Python logic. The system utilizes Google Sheets for a lightweight, collaborative database and LINE Bot for a highly accessible user interface. It enforces standard application procedures for contractors, provides mobile reporting tools for supervisors, and offers real-time data visualization for owners.",
     features: [
-      "40% reduction in modeling time",
-      "Automatic node coordinate export",
-      "Direct link to SAP2000 via API",
+      "Process Standardization & Error Prevention",
+      "Real-time LINE Bot Interface",
+      "Cloud Synchronization & Progress Tracking",
     ],
-    tech: ["Rhino", "Grasshopper", "Python", "FEM"],
-    demoVideo: "#",
-    link: "#",
-    github: "#",
-    status: "RESEARCH",
-    images: [],
+    tech: ["Python", "Line ChatBot", "Google Sheet"],
+    demoVideo: ["https://youtu.be/iFNkS2v9hEE"],
+    link: "https://youtu.be/iFNkS2v9hEE",
+    github: null,
+    status: "PROTOTYPE",
+    images: [
+      {
+        src: "/projects/InspectionSystem/Inspection-System-1.png",
+        caption: "FIG_01: System Diagram",
+      },
+    ],
+  },
+  {
+    id: "3DTrussplatform",
+    title: "Web-based 3D Truss Analysis Application",
+    cover: "/projects/3DTrussplatform/3DTrussplatform-1.png",
+    category: "HYBRID",
+    subtitle: "A Full-Stack Solution Integrating React & Python FEM.",
+    description:
+      "This project bridges modern web tech with structural mechanics to create a lightweight, cross-platform analysis environment.",
+    challenge:
+      "The main challenge was achieving high-performance 3D rendering and interaction in the web while handling intensive FEM matrix calculations.",
+    solution:
+      "Implemented a decoupled architecture: React + R3F on the frontend for a CAD-like feel, and Django + Python on the backend for scientific computing, balancing interactivity with power.",
+    features: [
+      "Versatile Modeling & DXF Support",
+      "Python-Powered FEM Engine",
+      "Interactive Data Visualization",
+    ],
+    tech: ["Python", "Django", "React", "three.js(R3F)"],
+    demoVideo: ["https://youtu.be/S-NDjL-cWu0", "https://youtu.be/CF56by8XvwI"],
+    link: "https://youtu.be/CF56by8XvwI",
+    github: null,
+    status: "EXPERIMENTAL",
+    images: [
+      {
+        src: "/projects/3DTrussplatform/3DTrussplatform-1.png",
+        caption: "FIG_01: Demo Screenshot",
+      },
+    ],
   },
   // ... 其他專案請依此類推 ...
 ];

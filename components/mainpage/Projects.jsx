@@ -40,6 +40,11 @@ const getStatusConfig = (status) => {
         style: "bg-blue-950/40 text-blue-400 border-blue-500/30",
         dot: "bg-blue-400",
       };
+    case "EXPERIMENTAL":
+      return {
+        style: "bg-pink-950/40 text-pink-400 border-pink-500/30",
+        dot: "bg-pink-400",
+      };
     default:
       return {
         style: "bg-slate-900 text-slate-500 border-slate-800",
@@ -115,7 +120,20 @@ const ProjectCard = ({ project, onCategoryClick }) => {
 
   return (
     <div className="block h-full group relative bg-slate-900/40 border border-slate-800 hover:border-cyan-500/50 rounded-lg p-6 transition-all duration-500 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] hover:-translate-y-1 overflow-hidden flex flex-col">
-      {/* (背景圖邏輯省略，維持原樣) */}
+      {/* 🔥 背景圖片層 (預設隱藏，Hover 顯現) */}
+      {project.cover && (
+        <>
+          <div className="absolute inset-0 z-0">
+            <img
+              src={project.cover}
+              alt={project.title}
+              className="w-full h-full object-cover opacity-0 group-hover:opacity-20 transition-opacity duration-500 grayscale group-hover:grayscale-0" // Hover 時出現並從黑白變彩色
+            />
+          </div>
+          {/* 漸層遮罩，確保文字永遠清晰 */}
+          <div className="absolute inset-0 z-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-slate-950/40 opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
+        </>
+      )}
 
       <div className="relative z-10 flex flex-col h-full">
         <div className="flex justify-between items-start mb-4">

@@ -212,7 +212,9 @@ export default function ProjectDetail({ params }) {
                 <p>{project.solution}</p>
               </div>
               {/* 在這裡插入影片播放器 */}
-              <VideoPlayer src={project.demoVideo} />
+              {project.demoVideo.map((videourl) => (
+                <VideoPlayer src={videourl} />
+              ))}
             </section>
 
             {/* 關鍵功能 (Key Features) */}
