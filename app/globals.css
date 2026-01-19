@@ -1,5 +1,5 @@
 @import "tailwindcss";
-
+@plugin "@tailwindcss/typography";
 
 :root {
   --foreground-rgb: 255, 255, 255;
@@ -16,5 +16,5 @@ body {
     )
     rgb(var(--background-start-rgb));
   /* 強制設定背景為黑色，避免載入時閃白光 */
-  background-color: #020617; 
+  background-color: #020617;
 }

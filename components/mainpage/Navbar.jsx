@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 
 export default function Navbar() {
@@ -20,8 +21,11 @@ export default function Navbar() {
           <a href="#projects" className="hover:text-cyan-400 transition-colors">
             03. WORK
           </a>
+          <a href="#blogs" className="hover:text-cyan-400 transition-colors">
+            04. Blog
+          </a>
           <a href="#contact" className="hover:text-cyan-400 transition-colors">
-            04. CONTACT
+            05. CONTACT
           </a>
         </div>
 

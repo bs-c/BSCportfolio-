@@ -90,6 +90,36 @@ export const projectsData = [
       },
     ],
   },
-
+  {
+    id: "RevitRebarAPI",
+    title: "Revit Rebar Automation Plugin",
+    cover: "/projects/RevitRebarAPI/RevitRebarAPI-1.jpeg",
+    category: "HYBRID",
+    subtitle: "A High-Efficiency BIM Tool Integrating C# and Revit API",
+    description: `An efficiency tool developed using the Revit API and Windows Forms. It transforms the tedious manual rebar placement process into simple parameter inputs through automation algorithms, achieving a seamless "input-to-model" workflow.`,
+    challenge:
+      "In the traditional structural detailing workflow, there is a significant disconnect between calculation and modeling. Engineers often have to manually convert the required reinforcement area (calculated in Excel) into specific bar counts and spacing, then manually place these elements in Revit. This process is not only repetitive and time-consuming but also prone to human error—a simple miscalculation or a slip of the mouse can lead to inaccurate documentation or clashes, creating a bottleneck in the BIM delivery pipeline.",
+    solution: `To bridge this gap, I developed a custom C# automation tool integrated directly into Revit. By leveraging the Revit API and Windows Forms, I created a seamless interface where users simply input the design parameters—specifically the required steel area and bar size. The plugin's underlying algorithm instantly processes these inputs to determine the optimal rebar configuration and programmatically generates the 3D rebar entities. This transforms a multi-step, manual drafting task into a "single-click" automated operation, ensuring both geometric precision and data consistency.`,
+    features: [
+      `Intuitive Parameter Input (Windows Forms) Developed with Windows Forms to provide a clean interface, allowing users to easily input "Required Reinforcement Area" and select standard "Bar Sizes," lowering the barrier to entry.`,
+      "Intelligent Calculation Logic Built-in algorithms automatically convert user inputs into the optimal rebar spacing and quantity based on design requirements, eliminating the need for manual calculation.",
+      "Directly interacts with the Revit core to eliminate repetitive manual clicking, generating precise 3D rebar models with a single click to significantly improve modeling efficiency and accuracy.",
+    ],
+    tech: ["C#", "Revit API", ".NET Framework"],
+    demoVideo: ["https://youtu.be/pgxuDWJs-aQ", "https://youtu.be/JOBQ3_T3Pkk"],
+    link: "https://youtu.be/pgxuDWJs-aQ",
+    github: null,
+    status: "PROTOTYPE",
+    images: [
+      {
+        src: "/projects/RevitRebarAPI/RevitRebarAPI-2.png",
+        caption: "FIG_01: Automated Column Reinforcement Demo",
+      },
+      {
+        src: "/projects/RevitRebarAPI/RevitRebarAPI-3.png",
+        caption: "FIG_02: Automated Beam Reinforcement Demo",
+      },
+    ],
+  },
   // ... 其他專案請依此類推 ...
 ];

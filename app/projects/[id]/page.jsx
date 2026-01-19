@@ -14,13 +14,12 @@ import {
   X,
   Maximize2,
 } from "lucide-react";
-import { projectsData } from "../../lib/data"; // 請確認路徑正確
+import { projectsData } from "../../lib/data";
 import { YouTubeEmbed } from "@next/third-parties/google";
-// 放在 import 下方，ProjectDetail 之前
+
+// --- VideoPlayer 元件 (保持不變) ---
 const VideoPlayer = ({ src }) => {
   if (!src) return null;
-
-  // 提取 Video ID 的邏輯
   const getVideoId = (url) => {
     if (!url) return null;
     if (url.includes("v=")) return url.split("v=")[1].split("&")[0];
@@ -29,31 +28,26 @@ const VideoPlayer = ({ src }) => {
     if (url.includes("/embed/")) return url.split("/embed/")[1].split("?")[0];
     return null;
   };
-
   const videoId = getVideoId(src);
-
-  // 如果不是 YouTube (是 mp4)，維持原樣
   if (!videoId) {
     return (
       <div className="my-12 group">
-        {/* ...保留你原本的樣式與 video 標籤... */}
-        <video controls className="w-full h-full object-cover">
+        <video
+          controls
+          className="w-full h-full object-cover rounded-lg border border-slate-800"
+        >
           <source src={src} type="video/mp4" />
         </video>
       </div>
     );
   }
-
-  // 如果是 YouTube，使用官方元件
   return (
     <div className="my-12 group">
       <div className="flex items-center gap-2 mb-3 text-cyan-500 font-mono text-sm tracking-widest">
         <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
         LIVE_DEMO_SEQUENCE
       </div>
-
       <div className="relative w-full aspect-video bg-slate-900 border border-slate-800 rounded-lg overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.5)]">
-        {/* 使用官方元件，它會自動處理 iframe 和權限 */}
         <YouTubeEmbed videoid={videoId} style="width: 100%; height: 100%;" />
       </div>
     </div>
@@ -62,34 +56,23 @@ const VideoPlayer = ({ src }) => {
 
 export default function ProjectDetail({ params }) {
   const [selectedImage, setSelectedImage] = useState(null);
-  // 1. 根據網址 ID 找到對應的專案資料
+
   const resolvedParams = use(params);
   const id = resolvedParams.id;
   const project = projectsData.find((p) => p.id === id);
-  const category = project.category;
-  // 2. 如果找不到，回傳 404
+
   if (!project) {
     notFound();
   }
 
   const getHeaders = (cat) => {
     if (cat === "CIVIL") {
-      return {
-        section1: "The Challenge", // 或 'Key Challenges'
-        section2: "The Execution", // 或 'Engineering Strategy'
-      };
+      return { section1: "The Challenge", section2: "The Execution" };
     }
-    // 預設給 DEV 和 HYBRID 用
-    return {
-      section1: "The Problem",
-      section2: "The Solution",
-    };
+    return { section1: "The Problem", section2: "The Solution" };
   };
-  const headers = getHeaders(category);
-  console.log(category);
-  console.log(headers);
+  const headers = getHeaders(project.category);
 
-  // 設定對應的 Icon
   const CategoryIcon =
     {
       CIVIL: Box,
@@ -99,18 +82,15 @@ export default function ProjectDetail({ params }) {
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-300 font-sans selection:bg-cyan-500/30">
-      {/* --- 燈箱 (Lightbox) 區域 --- */}
+      {/* --- Lightbox (保持不變) --- */}
       {selectedImage && (
         <div
           className="fixed inset-0 z-[100] bg-slate-950/90 backdrop-blur-sm flex items-center justify-center p-4 md:p-10 cursor-zoom-out animate-in fade-in duration-200"
           onClick={() => setSelectedImage(null)}
         >
-          {/* 關閉按鈕 */}
           <button className="absolute top-6 right-6 text-slate-400 hover:text-white transition-colors">
             <X size={32} />
           </button>
-
-          {/* 大圖容器 */}
           <div
             className="relative max-w-7xl max-h-full rounded-lg overflow-hidden border border-slate-700 shadow-2xl bg-slate-900"
             onClick={(e) => e.stopPropagation()}
@@ -131,7 +111,8 @@ export default function ProjectDetail({ params }) {
           </div>
         </div>
       )}
-      {/* 頂部導航 */}
+
+      {/* --- Navbar (保持不變) --- */}
       <nav className="fixed top-0 w-full bg-slate-950/80 backdrop-blur border-b border-slate-800 z-50">
         <div className="max-w-4xl mx-auto px-6 h-16 flex items-center">
           <Link
@@ -143,9 +124,27 @@ export default function ProjectDetail({ params }) {
         </div>
       </nav>
 
-      <div className="max-w-4xl mx-auto px-6 pt-32 pb-24">
-        {/* Header: 專案標題區 */}
-        <header className="mb-16 border-b border-slate-800 pb-12">
+      {/* 🔥🔥🔥 關鍵修改區域：Hero Section (紅框區域) 🔥🔥🔥
+         這是一個獨立的容器，負責包住 Header 和 背景圖
+      */}
+      <section className="relative w-full border-b border-slate-800 bg-slate-900/20 overflow-hidden">
+        {/* 1. 背景圖層：只存在於這個 section 內 */}
+        {project.cover && (
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            {/* 圖片：填滿整個 Hero 區塊 */}
+            <img
+              src={project.cover}
+              alt="Header Background"
+              className="w-full h-full object-cover opacity-50 blur-[2px] filter grayscale contrast-125 mix-blend-screen"
+            />
+
+            {/* 漸層遮罩：讓圖片底部稍微融入邊框 */}
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-slate-950/80 to-slate-950"></div>
+          </div>
+        )}
+
+        {/* 2. Header 內容層：原本的 Header 移到這裡 */}
+        <div className="relative z-10 max-w-4xl mx-auto px-6 pt-32 pb-16">
           <div className="flex items-center gap-3 text-cyan-500 mb-4 font-mono text-sm tracking-widest">
             <CategoryIcon size={18} />
             <span>PROJECT_ID: {project.id.toUpperCase()}</span>
@@ -161,12 +160,11 @@ export default function ProjectDetail({ params }) {
             {project.subtitle || project.description}
           </p>
 
-          {/* Links */}
           <div className="flex gap-4 mt-8">
             {project.github && (
               <a
                 href={project.github}
-                className="flex items-center gap-2 px-4 py-2 bg-slate-900 border border-slate-700 rounded hover:border-cyan-500 hover:text-white transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-slate-900/80 border border-slate-700 rounded hover:border-cyan-500 hover:text-white transition-colors backdrop-blur-sm"
               >
                 <Github size={18} /> Source Code
               </a>
@@ -174,30 +172,33 @@ export default function ProjectDetail({ params }) {
             {project.link && (
               <a
                 href={project.link}
-                className="flex items-center gap-2 px-4 py-2 bg-cyan-600/10 border border-cyan-500/50 text-cyan-400 rounded hover:bg-cyan-600/20 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-cyan-950/30 border border-cyan-500/50 text-cyan-400 rounded hover:bg-cyan-600/20 transition-colors backdrop-blur-sm"
               >
                 <ExternalLink size={18} /> Live Demo
               </a>
             )}
           </div>
-        </header>
+        </div>
+      </section>
 
-        {/* Content Grid */}
+      {/* 🔥🔥🔥 下方內容區域 (純黑背景) 🔥🔥🔥
+         不再被背景圖影響，保持乾淨
+      */}
+      <div className="max-w-4xl mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* 左欄：主要內容 */}
           <div className="md:col-span-2 space-y-12">
-            {/* 挑戰 (Challenge) */}
+            {/* Challenge / Problem */}
             <section>
               <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <span className="text-red-400">01.</span> {headers.section1}
               </h2>
               <div className="p-6 bg-slate-900/30 border-l-2 border-red-500/50 rounded-r-lg text-slate-400 leading-relaxed">
-                {project.challenge ||
-                  "Description of the technical challenge goes here..."}
+                {project.challenge || project.problem || "Description..."}
               </div>
             </section>
 
-            {/* 解決方案 (Solution) */}
+            {/* Solution / Execution */}
             <section>
               <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <span className="text-cyan-400">02.</span> {headers.section2}
@@ -205,13 +206,13 @@ export default function ProjectDetail({ params }) {
               <div className="p-6 bg-slate-900/30 border-l-2 border-cyan-500/50 rounded-r-lg text-slate-400 leading-relaxed">
                 <p>{project.solution}</p>
               </div>
-              {/* 在這裡插入影片播放器 */}
-              {project.demoVideo.map((videourl, index) => (
+
+              {project.demoVideo?.map((videourl, index) => (
                 <VideoPlayer key={index} src={videourl} />
               ))}
             </section>
 
-            {/* 關鍵功能 (Key Features) */}
+            {/* Key Features */}
             <section>
               <h2 className="text-2xl font-bold text-white mb-6">
                 Key Features
@@ -235,7 +236,6 @@ export default function ProjectDetail({ params }) {
 
           {/* 右欄：側邊欄資訊 */}
           <aside className="space-y-8">
-            {/* Tech Stack Widget */}
             <div className="p-6 bg-slate-900 border border-slate-800 rounded-lg">
               <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
                 <Terminal size={16} className="text-cyan-500" /> TECH_STACK
@@ -252,39 +252,35 @@ export default function ProjectDetail({ params }) {
               </div>
             </div>
 
-            {/* 專案圖片 (Placeholder) */}
-            <div className="aspect-video bg-slate-900 border border-slate-800 rounded-lg flex items-center justify-center text-slate-600">
-              {/* 取代原本的 [ IMAGE_PLACEHOLDER ] */}
-              <div className="space-y-4">
-                {project.images?.map((img, i) => (
-                  <div
-                    key={i}
-                    onClick={() => setSelectedImage(img)}
-                    className="group relative bg-slate-900 border border-slate-800 rounded-lg overflow-hidden"
-                  >
-                    {/* 圖片本身 */}
-                    <img
-                      src={img.src}
-                      alt={img.caption}
-                      className="w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500"
-                    />
-
-                    {/* 科技感掃描線 (裝飾) */}
-                    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none"></div>
-                    <div className="absolute top-0 left-0 w-full h-[1px] bg-cyan-500/50 shadow-[0_0_10px_#06b6d4] translate-y-[-100%] group-hover:animate-scan"></div>
-
-                    {/* 底部 Caption */}
-                    <div className="absolute bottom-0 w-full bg-slate-950/80 border-t border-slate-800 p-2 flex justify-between items-center backdrop-blur-sm">
-                      <span className="text-[10px] font-mono text-cyan-400 truncate">
-                        {img.caption}
-                      </span>
-                      <span className="text-[8px] text-slate-600 border border-slate-700 px-1 rounded">
-                        IMG_{i + 1}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 text-slate-500 font-mono text-xs mb-2">
+                <Maximize2 size={12} /> SYSTEM_GALLERY
               </div>
+
+              {project.images?.map((img, i) => (
+                <div
+                  key={i}
+                  onClick={() => setSelectedImage(img)}
+                  className="group relative bg-slate-900 border border-slate-800 rounded-lg overflow-hidden cursor-pointer hover:border-cyan-500/50 transition-all"
+                >
+                  <img
+                    src={img.src}
+                    alt={img.caption}
+                    className="w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500"
+                  />
+                  <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none"></div>
+                  <div className="absolute top-0 left-0 w-full h-[1px] bg-cyan-500/50 shadow-[0_0_10px_#06b6d4] translate-y-[-100%] group-hover:animate-scan"></div>
+
+                  <div className="absolute bottom-0 w-full bg-slate-950/80 border-t border-slate-800 p-2 flex justify-between items-center backdrop-blur-sm">
+                    <span className="text-[10px] font-mono text-cyan-400 truncate max-w-[70%]">
+                      {img.caption}
+                    </span>
+                    <span className="text-[8px] text-slate-600 border border-slate-700 px-1 rounded">
+                      IMG_{i + 1}
+                    </span>
+                  </div>
+                </div>
+              ))}
             </div>
           </aside>
         </div>

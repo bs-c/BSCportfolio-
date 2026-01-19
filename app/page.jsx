@@ -1,5 +1,4 @@
-"use client";
-import React, { useState } from "react";
+import React from "react";
 import { Terminal, Cpu, Github, Linkedin, Mail } from "lucide-react";
 import Navbar from "@/components/mainpage/Navbar";
 import Projects from "@/components/mainpage/Projects";
@@ -7,15 +6,13 @@ import Capabilities from "@/components/mainpage/Capabilities";
 import About from "@/components/mainpage/About";
 import Hero from "@/components/mainpage/Hero";
 import Contact from "@/components/mainpage/Contact";
+import RecentLogs from "@/components/mainpage/RecentLogs";
+import { getSortedPostsData } from "@/app/lib/posts";
 
 /* --- 共用元件：區塊標題 --- */
 const SectionTitle = ({ number, title, subtitle }) => (
   <div className="mb-16">
-    <div className="flex items-center gap-4 mb-4">
-      <span className="font-mono text-cyan-500 text-sm tracking-widest">
-        0{number}.
-      </span>
-      <div className="h-1px w-12 bg-cyan-900/50"></div>
+    <div className="flex  mb-4">
       <span className="font-mono text-blue-400 text-sm tracking-widest uppercase">
         {subtitle}
       </span>
@@ -26,6 +23,8 @@ const SectionTitle = ({ number, title, subtitle }) => (
 
 /* --- Main Page Component --- */
 export default function Portfolio() {
+  const allPosts = getSortedPostsData();
+  const recentPosts = allPosts.slice(0, 3);
   return (
     <div className="bg-slate-950 min-h-screen text-slate-200 selection:bg-cyan-500 selection:text-black">
       <Navbar />
@@ -34,6 +33,7 @@ export default function Portfolio() {
         <About SectionTitle={SectionTitle} />
         <Capabilities SectionTitle={SectionTitle} />
         <Projects />
+        <RecentLogs posts={recentPosts} />
         <Contact />
       </main>
     </div>
