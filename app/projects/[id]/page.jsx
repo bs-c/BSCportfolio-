@@ -1,4 +1,4 @@
-"use client"; // 🔥 必須加入這行，因為需要用到 useState (點擊互動)
+"use client";
 import React, { useState, use } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -15,38 +15,36 @@ import {
   Maximize2,
 } from "lucide-react";
 import { projectsData } from "../../lib/data"; // 請確認路徑正確
-
+import { YouTubeEmbed } from "@next/third-parties/google";
 // 放在 import 下方，ProjectDetail 之前
 const VideoPlayer = ({ src }) => {
   if (!src) return null;
 
-  // --- 🔥 新增：智慧型 YouTube 網址轉換器 ---
-  const getEmbedUrl = (url) => {
-    // 檢查是否為 YouTube 網址
-    if (!url.includes("youtube.com") && !url.includes("youtu.be")) return url;
-
-    // 如果已經是 embed 網址，直接回傳
-    if (url.includes("/embed/")) return url;
-
-    // 嘗試從網址中抓取 Video ID
-    let videoId = "";
-
-    // 處理 youtube.com/watch?v=ID
-    if (url.includes("v=")) {
-      videoId = url.split("v=")[1].split("&")[0];
-    }
-    // 處理 youtu.be/ID (短網址)
-    else if (url.includes("youtu.be/")) {
-      videoId = url.split("youtu.be/")[1].split("?")[0];
-    }
-
-    // 回傳正確的嵌入格式
-    return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+  // 提取 Video ID 的邏輯
+  const getVideoId = (url) => {
+    if (!url) return null;
+    if (url.includes("v=")) return url.split("v=")[1].split("&")[0];
+    if (url.includes("youtu.be/"))
+      return url.split("youtu.be/")[1].split("?")[0];
+    if (url.includes("/embed/")) return url.split("/embed/")[1].split("?")[0];
+    return null;
   };
 
-  const finalSrc = getEmbedUrl(src);
-  const isYoutube = finalSrc.includes("youtube.com/embed");
+  const videoId = getVideoId(src);
 
+  // 如果不是 YouTube (是 mp4)，維持原樣
+  if (!videoId) {
+    return (
+      <div className="my-12 group">
+        {/* ...保留你原本的樣式與 video 標籤... */}
+        <video controls className="w-full h-full object-cover">
+          <source src={src} type="video/mp4" />
+        </video>
+      </div>
+    );
+  }
+
+  // 如果是 YouTube，使用官方元件
   return (
     <div className="my-12 group">
       <div className="flex items-center gap-2 mb-3 text-cyan-500 font-mono text-sm tracking-widest">
@@ -54,30 +52,9 @@ const VideoPlayer = ({ src }) => {
         LIVE_DEMO_SEQUENCE
       </div>
 
-      <div className="relative w-full aspect-video bg-slate-900 border border-slate-800 rounded-lg overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.5)] group-hover:border-cyan-500/50 transition-colors">
-        {/* 裝飾性掃描線 */}
-        <div className="absolute top-0 left-0 w-full h-[1px] bg-cyan-500/30 z-10 animate-scan pointer-events-none"></div>
-
-        {isYoutube ? (
-          <iframe
-            src={finalSrc}
-            title="Project Demo"
-            className="w-full h-full"
-            // 🔥 加入這些權限設定非常重要，否則可能會無法播放
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
-        ) : (
-          <video controls className="w-full h-full object-cover">
-            <source src={finalSrc} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        )}
-      </div>
-
-      <div className="mt-2 flex justify-between text-[10px] font-mono text-slate-600">
-        <span>STATUS: PLAYBACK_READY</span>
-        <span>MODE: HD_STREAM</span>
+      <div className="relative w-full aspect-video bg-slate-900 border border-slate-800 rounded-lg overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+        {/* 使用官方元件，它會自動處理 iframe 和權限 */}
+        <YouTubeEmbed videoid={videoId} style="width: 100%; height: 100%;" />
       </div>
     </div>
   );
@@ -89,11 +66,28 @@ export default function ProjectDetail({ params }) {
   const resolvedParams = use(params);
   const id = resolvedParams.id;
   const project = projectsData.find((p) => p.id === id);
-
+  const category = project.category;
   // 2. 如果找不到，回傳 404
   if (!project) {
     notFound();
   }
+
+  const getHeaders = (cat) => {
+    if (cat === "CIVIL") {
+      return {
+        section1: "The Challenge", // 或 'Key Challenges'
+        section2: "The Execution", // 或 'Engineering Strategy'
+      };
+    }
+    // 預設給 DEV 和 HYBRID 用
+    return {
+      section1: "The Problem",
+      section2: "The Solution",
+    };
+  };
+  const headers = getHeaders(category);
+  console.log(category);
+  console.log(headers);
 
   // 設定對應的 Icon
   const CategoryIcon =
@@ -195,7 +189,7 @@ export default function ProjectDetail({ params }) {
             {/* 挑戰 (Challenge) */}
             <section>
               <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-                <span className="text-red-400">01.</span> The Problem
+                <span className="text-red-400">01.</span> {headers.section1}
               </h2>
               <div className="p-6 bg-slate-900/30 border-l-2 border-red-500/50 rounded-r-lg text-slate-400 leading-relaxed">
                 {project.challenge ||
@@ -206,14 +200,14 @@ export default function ProjectDetail({ params }) {
             {/* 解決方案 (Solution) */}
             <section>
               <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-                <span className="text-cyan-400">02.</span> The Solution
+                <span className="text-cyan-400">02.</span> {headers.section2}
               </h2>
               <div className="p-6 bg-slate-900/30 border-l-2 border-cyan-500/50 rounded-r-lg text-slate-400 leading-relaxed">
                 <p>{project.solution}</p>
               </div>
               {/* 在這裡插入影片播放器 */}
-              {project.demoVideo.map((videourl) => (
-                <VideoPlayer src={videourl} />
+              {project.demoVideo.map((videourl, index) => (
+                <VideoPlayer key={index} src={videourl} />
               ))}
             </section>
 
