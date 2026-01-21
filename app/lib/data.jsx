@@ -40,6 +40,37 @@ export const projectsData = [
     ],
   },
   {
+    id: "SurveyWebApp", // 這是網址會用到的 slug (唯一識別碼)
+    title: "Survey Web App",
+    cover: "/projects/SurveyWebApp/SurveyWebApp-1.png",
+    category: "HYBRID",
+    subtitle:
+      "web-based surveying tool integrating traverse, leveling, and geometric alignment design, featuring project management and real-time graphical preview.",
+    description:
+      "A web-based surveying platform integrating traverse, leveling, and alignment calculations. Built with React, Django, and WebGL (R3F), it features real-time 2D visualization and multi-project management for streamlined engineering workflows.",
+    challenge:
+      "Traditional civil engineering surveying workflows often face challenges with fragmented file management and disjointed calculation processes, where data for different alignments is scattered without a unified interface for organization. This inefficiency is exacerbated by the disconnect between numerical input and graphical verification, as engineers cannot immediately see how changes to mileage or elevation parameters affect the actual geometry, making error detection difficult. Furthermore, the lack of a standardized, guided workflow increases the risk of formatting errors and missing files, ultimately compromising the reliability and efficiency of the surveying design process.",
+    solution:
+      "Survey Web App offers a comprehensive cloud-based solution that centralizes project management via an intuitive sidebar, enabling users to efficiently switch between and maintain multiple alignment projects. At its core, the platform integrates an Excel-like interactive editing grid with a high-performance WebGL rendering engine to achieve real-time synchronization between data and graphics; any modification to PVI or grade parameters is instantly reflected in the 2D alignment graph below, providing immediate visual feedback. Additionally, the system employs a standardized four-stage tabbed workflow that guides users sequentially through uploading, calculating, viewing, and saving, effectively minimizing human error and ensuring the accuracy of the surveying design results.",
+    features: [
+      "Covers traverse calculation, leveling, horizontal alignment analysis (including geometric interaction between two alignments), and vertical profile calculation.",
+      "A high-performance 2D rendering viewport built on React Three Fiber, offering precise geometric representation and a smooth, CAD-like interactive experience (Pan/Zoom).",
+      "Supports batch information import via Excel file upload.",
+      "Generates detailed Excel calculation reports and standard DXF 2D alignment files complete with layer information.",
+    ],
+    tech: ["React", "Django", "R3F"],
+    demoVideo: ["https://youtu.be/IOLdL3b16hc", "https://youtu.be/1AAcATYR4hM"],
+    link: "https://youtu.be/1AAcATYR4hM",
+    github: null,
+    status: "INTERNAL_TOOL",
+    images: [
+      {
+        src: "/projects/SurveyWebApp/SurveyWebApp-2.png",
+        caption: "FIG_01: Demo Screenshot ",
+      },
+    ],
+  },
+  {
     id: "AR-Structural-Viz", // 這是網址會用到的 slug (唯一識別碼)
     title: "AR Structural Viz: QR-Anchored Blueprint Visualization",
     cover: "/projects/ARStructuralViz/ARStructuralViz-1.png",
@@ -230,5 +261,6 @@ export const projectsData = [
       },
     ],
   },
+
   // ... 其他專案請依此類推 ...
 ];
