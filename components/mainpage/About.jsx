@@ -67,16 +67,6 @@ export default function About({ SectionTitle }) {
             </div>
           ))}
         </div>
-
-        {/* 展開/收合按鈕 */}
-        {/*<button
-        onClick={() => setIsExpanded(!isExpanded)}
-        className="mt-8 text-xs text-cyan-500 hover:text-cyan-400 border-b border-dashed border-cyan-500/50 pb-1 transition-colors"
-      >
-        {isExpanded
-          ? "[ COLLAPSE LOGS ]"
-          : `[ LOAD OLDER LOGS (${experiences.length - 1} MORE) ]`}
-      </button>*/}
       </div>
     );
   };
@@ -120,7 +110,8 @@ export default function About({ SectionTitle }) {
               </span>
               <ul className="space-y-2">
                 {[
-                  "SAP2000 / ETABS/SAFE",
+                  "SAP2000/ETABS",
+                  "SAFE",
                   "Midas",
                   "Rhino/Grasshopper",
                   "SketchUp",
@@ -145,13 +136,14 @@ export default function About({ SectionTitle }) {
               </span>
               <ul className="space-y-2">
                 {[
+                  "React",
+                  "Node.js",
+                  "Django",
+                  "ML/DL (PyTorch, Keras, sklearn)",
+                  "Unity",
                   "Python",
                   "HTML/CSS/JS",
-                  "React",
-                  "Tailwind",
-                  "Node.js",
                   "C#",
-                  "Unity",
                 ].map((item) => (
                   <li
                     key={item}

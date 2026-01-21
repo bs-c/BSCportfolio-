@@ -18,7 +18,7 @@ export default function BlogList({ allPosts }) {
       selectedCategory === "ALL" || post.category === selectedCategory;
     // 條件 B: 語言符合 (或選 ALL) - 假設您的 md 檔頭有 lang: "EN" 或 "ZH"
     const matchLang =
-      selectedLang === "ALL" || (post.lang || "繁中") === selectedLang;
+      selectedLang === "ALL" || (post.lang || "ZH-TW") === selectedLang;
 
     return matchCategory && matchLang;
   });
@@ -38,7 +38,7 @@ export default function BlogList({ allPosts }) {
           {/* 🔥 語言切換器 (做得很低調，像系統設定) */}
           <div className="flex items-center gap-2 bg-slate-900/50 p-1 rounded border border-slate-800">
             <Globe size={12} className="text-slate-500 ml-2" />
-            {["ALL", "EN", "繁中"].map((lang) => (
+            {["ALL", "EN", "ZH-TW"].map((lang) => (
               <button
                 key={lang}
                 onClick={() => setSelectedLang(lang)}
@@ -108,7 +108,7 @@ export default function BlogList({ allPosts }) {
                         : "border-slate-600 text-cyan-500 bg-slate-800" // 中文：稍微亮一點
                     }`}
                   >
-                    {post.lang === "EN" ? "EN" : "繁中"}
+                    {post.lang === "EN" ? "EN" : "ZH-TW"}
                   </span>
 
                   {/* 使用共用的顏色函式 */}

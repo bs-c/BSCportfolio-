@@ -5,6 +5,8 @@ import { ArrowLeft } from "lucide-react";
 import { use } from "react"; // 🔥 1. 新增這行：引入 use
 import { getCategoryColor } from "@/app/lib/utils";
 
+import { notFound } from "next/navigation";
+
 // 🔥 1. 引入數學插件
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
@@ -35,6 +37,10 @@ export default function Post({ params }) {
 
   // 現在 slug 有值了，再去抓資料就不會報錯 undefined.md
   const post = getPostData(slug);
+
+  if (!post) {
+    notFound();
+  }
 
   return (
     <article className="py-24 px-6 max-w-3xl mx-auto min-h-screen">

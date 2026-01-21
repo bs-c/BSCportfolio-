@@ -30,16 +30,23 @@ export default function Capabilities({ SectionTitle }) {
       icon: <Hammer size={32} />,
       color: "text-purple-400",
       description:
-        "Helping engineering firms transition to modern workflows. Bridging the communication gap between engineers and developers.",
-      tools: ["C#", "Python", "Revit"],
+        "Guiding firms through digital transformation and data-driven workflows. Bridging the technical communication gap between engineers and developers",
+      tools: ["C#", "Python", "Revit", "Strategy"],
     },
     {
-      title: "Programme Development",
+      title: "Intelligent Software Solutions", //"Programme Development",
       icon: <Globe size={32} />,
       color: "text-cyan-400",
       description:
-        "Building custom applications for engineering data visualization, dashboards, and platforms.",
-      tools: ["C#", "Python", "HTML/CSS/JS", "React", "Django", "Node.js"],
+        "Building custom applications, dashboards, and AI-enhanced engineering platforms. Integrating AI models to automate decision-making and visualize complex data.",
+      tools: [
+        "C#",
+        "Python(AI/ML)",
+        "HTML/CSS/JS",
+        "React",
+        "Django",
+        "Node.js",
+      ],
     },
   ];
 

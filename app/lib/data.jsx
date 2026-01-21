@@ -2,6 +2,115 @@
 
 export const projectsData = [
   {
+    id: "TimeberExpertSystem", // 這是網址會用到的 slug (唯一識別碼)
+    title: "Online Timber Expert System",
+    cover: "/projects/TimeberExpertSystem/TimeberExpertSystem-1.png",
+    category: "HYBRID",
+    subtitle:
+      "A Professional Web Tool for Chi Cheng Ltd.(啟誠興業股份有限公司): Integrating International Standards with Automated Material Selection.",
+    description:
+      "A web-based expert system that automates structural analysis and material selection for timber engineering, simplifying cross-border code compliance.",
+    challenge:
+      "Chi Cheng Ltd.(啟誠興業股份有限公司) aims to introduce high-quality international timber to the Taiwan market. However, local architects and structural engineers are often unfamiliar with foreign timber codes (EN/ANSI/JAS). The complexity of manually converting these specifications to Taiwan's Building Code created a knowledge gap, causing potential clients to hesitate in adopting timber solutions and slowing down the company's business growth.",
+    solution:
+      " I constructed a public-facing Expert System that encapsulates complex structural mechanics and code logic behind a user-friendly interface. Architects simply input design loads, and the system instantly recommends materials compliant with local regulations, accompanied by visual safety checks. This drastically lowers the technical barrier to entry and accelerates the decision-making process for clients.",
+    features: [
+      "Designed for external users, this engine automates the mapping of obscure foreign material parameters (EN/ANSI/JAS) to Taiwan Building Code values, making timber design accessible even to non-specialists.",
+      `Provides a "What You See Is What You Get" design experience. Upon entering span and load data, the system calculates safety factors for Moment, Shear, and Deflection in real-time, displaying results with clear OK/NG indicators`,
+      "Supports one-click generation of standard A4 structural calculation sheets and volume estimation tables. These reports are ready for client presentations or preliminary design submissions, enhancing communication efficiency.",
+    ],
+    tech: ["CSS", "JavaScript"],
+    demoVideo: ["https://youtu.be/Mv2VLE2m2Cc"],
+    link: "https://youtu.be/Mv2VLE2m2Cc",
+    github: null,
+    status: "BETA",
+    images: [
+      {
+        src: "/projects/TimeberExpertSystem/TimeberExpertSystem-2.png",
+        caption: "FIG_01: Input Interface ",
+      },
+      {
+        src: "/projects/TimeberExpertSystem/TimeberExpertSystem-3.png",
+        caption: "FIG_02: Calculation Result",
+      },
+      {
+        src: "/projects/TimeberExpertSystem/TimeberExpertSystem-4.png",
+        caption: "FIG_03: Export to PDF ",
+      },
+    ],
+  },
+  {
+    id: "AR-Structural-Viz", // 這是網址會用到的 slug (唯一識別碼)
+    title: "AR Structural Viz: QR-Anchored Blueprint Visualization",
+    cover: "/projects/ARStructuralViz/ARStructuralViz-1.png",
+    category: "HYBRID",
+    subtitle:
+      "Interactive 3D structural overlays via precise QR code anchoring using Unity & ARKit.",
+    description:
+      "Designed to bridge the gap between 2D drafts and 3D reality, this mobile application utilizes Unity and ARKit to bring structural blueprints to life. By detecting a specific QR code placed alongside the physical floor plan, the app calculates relative coordinates to accurately project a 1:1 scale 3D model onto the drawing. The system features a C#-based interactive interface, allowing users to toggle visibility for critical structural layers—footings, beams, columns, and slabs—providing a clear, X-ray-like understanding of the building's skeleton.",
+    // --- 內頁專屬詳細內容 ---
+    challenge:
+      "Structural logic is often lost in flat 2D blueprints, making it difficult for students and clients to visualize vertical relationships and spatial depth. Traditional interpretation requires significant cognitive effort and is prone to miscommunication.",
+    solution:
+      "A marker-based AR solution that uses QR codes as high-stability anchors. Instead of relying solely on image recognition of the drawing itself, the QR code acts as a robust reference point, ensuring the 3D hologram is instantiated at the precise relative position over the blueprint, allowing for stable and interactive inspection.",
+    features: [
+      "Leverages ARKit to detect QR codes as fiducial markers, instantly generating and anchoring the 3D model to the blueprint with high stability and accurate alignment.",
+      "Features a dynamic UI that empowers users to selectively show or hide specific structural elements (Footing, Beams, Columns, Slabs) for focused analysis.",
+      "Written in C#, the custom logic ensures smooth performance and interaction, allowing for a seamless educational or presentation experience on mobile devices.",
+    ],
+    tech: ["Unity", "C#", "ARKit", "iOS"],
+    demoVideo: ["https://youtu.be/3oYWGmNSFD4"],
+    link: "https://youtu.be/3oYWGmNSFD4",
+    github: null,
+    status: "EXPERIMENTAL",
+    images: [
+      {
+        src: "/projects/ARStructuralViz/ARStructuralViz-1.png",
+        caption: "FIG_01: System Flowchart ",
+      },
+      {
+        src: "/projects/ARStructuralViz/ARStructuralViz-2.png",
+        caption: "FIG_02: Demo Screenshot ",
+      },
+    ],
+  },
+  {
+    id: "GrasshopperSAP2000RealTime", // 這是網址會用到的 slug (唯一識別碼)
+    title: "Grasshopper-SAP2000 Real-Time Interoperability Link",
+    cover:
+      "/projects/GrasshopperSAP2000RealTime/GrasshopperSAP2000RealTime-1.png",
+    category: "HYBRID",
+    subtitle:
+      "Bridging Parametric Geometry and Structural Analysis via Python & CSI OAPI",
+    description:
+      "A computational design tool that establishes a live data bridge between Rhino/Grasshopper and SAP2000. By leveraging Python to wrap the CSI OAPI, this project allows for real-time synchronization of geometric data. Changes in Grasshopper parameters are instantly reflected in the SAP2000 analysis model, enabling a seamless Design-Analyze feedback loop.",
+    // --- 內頁專屬詳細內容 ---
+    challenge:
+      "Traditional structural workflows involve a disconnected process where geometry is modeled in CAD/Rhino and then manually rebuilt or imported into analysis software (SAP2000). This static data exchange makes design iterations slow and cumbersome, as every geometric modification requires re-exporting and re-defining boundary conditions.",
+    solution:
+      "I developed a Python-based connector script within Grasshopper that acts as a direct driver for SAP2000 via its OAPI. This eliminates file exchange entirely. The tool listens to parametric changes in Grasshopper and programmatically updates nodes, frames, and assignments in SAP2000 in real-time.",
+    features: [
+      "Modifying sliders in Grasshopper (e.g., span, height, truss depth) instantly updates the SAP2000 model geometry without manual exporting.",
+      "Uses Python to interface with the CSI OAPI, handling complex object creation and modification commands automatically.",
+      "Enables engineers to visualize structural implications of geometric changes immediately, facilitating rapid optimization during the conceptual design phase.",
+    ],
+    tech: ["Python", "CSI OAPI", "grasshopper"],
+    demoVideo: ["https://youtu.be/wbapGJKBuY8"],
+    link: "https://youtu.be/wbapGJKBuY8",
+    github: null,
+    status: "PROTOTYPE",
+    images: [
+      {
+        src: "/projects/GrasshopperSAP2000RealTime/GrasshopperSAP2000RealTime-1.png",
+        caption: "FIG_01: System Flowchart",
+      },
+      {
+        src: "/projects/GrasshopperSAP2000RealTime/GrasshopperSAP2000RealTime-2.png",
+        caption: "FIG_02: Demo Screenshot",
+      },
+    ],
+  },
+  {
     id: "Excel-to-SAP2000_ETABS", // 這是網址會用到的 slug (唯一識別碼)
     title: "Excel-to-SAP200/ETABS Modeling and Analysis Tool",
     cover: "/projects/ExcelToSAP2000byOAPI/ExcelToSAP2000byOAPI-1.png",
