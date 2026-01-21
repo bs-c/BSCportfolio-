@@ -13,14 +13,16 @@ import {
   List,
   Filter,
   X,
+  Layers, // 新增 Layers icon
 } from "lucide-react";
 import { projectsData } from "@/app/lib/data";
 
-// --- 共用樣式設定 (從外部引入或寫在這裡) ---
+// --- 共用樣式設定 (保持不變) ---
 const getStatusConfig = (status) => {
-  // ... (保留您之前的 getStatusConfig 程式碼) ...
   switch (status) {
     case "DEPLOYED":
+    case "PUBLISHED": // 相容不同命名
+    case "LIVE":
       return {
         style: "bg-emerald-950/40 text-emerald-400 border-emerald-500/30",
         dot: "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]",
@@ -32,8 +34,8 @@ const getStatusConfig = (status) => {
       };
     case "PROTOTYPE":
       return {
-        style: "bg-fuchsia-950/40 text-fuchsia-400 border-fuchsia-500/30",
-        dot: "bg-fuchsia-400",
+        style: "bg-cyan-950/40 text-cyan-400 border-cyan-500/30",
+        dot: "bg-cyan-400",
       };
     case "RESEARCH":
       return {
@@ -53,9 +55,8 @@ const getStatusConfig = (status) => {
   }
 };
 
-// --- 子元件：列表模式的一列 ---
+// --- 子元件：列表模式的一列 (保持不變) ---
 const ProjectListRow = ({ project, onCategoryClick }) => {
-  // 🔥 接收 onCategoryClick
   const config = getStatusConfig(project.status);
 
   return (
@@ -84,7 +85,7 @@ const ProjectListRow = ({ project, onCategoryClick }) => {
         onClick={(e) => {
           e.stopPropagation();
           onCategoryClick(project.category);
-        }} // 🔥 點擊觸發篩選
+        }}
         className="shrink-0 flex items-center gap-1 px-2 py-1 rounded border border-slate-800 bg-slate-950/50 text-[10px] font-mono text-slate-500 hover:text-cyan-400 hover:border-cyan-500/50 transition-colors"
       >
         {project.category === "CIVIL" && <Box size={12} />}
@@ -113,36 +114,33 @@ const ProjectListRow = ({ project, onCategoryClick }) => {
   );
 };
 
-// --- 子元件：網格模式的卡片 ---
+// --- 子元件：網格模式的卡片 (保持不變) ---
 const ProjectCard = ({ project, onCategoryClick }) => {
-  // 🔥 接收 onCategoryClick
   const config = getStatusConfig(project.status);
 
   return (
     <div className="block h-full group relative bg-slate-900/40 border border-slate-800 hover:border-cyan-500/50 rounded-lg p-6 transition-all duration-500 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] hover:-translate-y-1 overflow-hidden flex flex-col">
-      {/* 🔥 背景圖片層 (預設隱藏，Hover 顯現) */}
+      {/* 背景圖片層 */}
       {project.cover && (
         <>
           <div className="absolute inset-0 z-0">
             <img
               src={project.cover}
               alt={project.title}
-              className="w-full h-full object-cover opacity-0 group-hover:opacity-20 transition-opacity duration-500 grayscale group-hover:grayscale-0" // Hover 時出現並從黑白變彩色
+              className="w-full h-full object-cover opacity-0 group-hover:opacity-20 transition-opacity duration-500 grayscale group-hover:grayscale-0"
             />
           </div>
-          {/* 漸層遮罩，確保文字永遠清晰 */}
           <div className="absolute inset-0 z-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-slate-950/40 opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
         </>
       )}
 
       <div className="relative z-10 flex flex-col h-full">
         <div className="flex justify-between items-start mb-4">
-          {/* Category Button */}
           <button
             onClick={(e) => {
               e.preventDefault();
               onCategoryClick(project.category);
-            }} // 🔥 點擊觸發篩選
+            }}
             className="p-2 bg-slate-950/80 backdrop-blur-sm rounded-md border border-slate-800 text-cyan-500 hover:bg-cyan-950/30 hover:border-cyan-500 transition-all"
             title={`Filter by ${project.category}`}
           >
@@ -151,7 +149,6 @@ const ProjectCard = ({ project, onCategoryClick }) => {
             {project.category === "HYBRID" && <Cpu size={20} />}
           </button>
 
-          {/* Status Tag */}
           <div
             className={`flex items-center gap-2 px-2 py-1 rounded border text-[10px] font-mono font-bold tracking-wider ${config.style}`}
           >
@@ -170,8 +167,6 @@ const ProjectCard = ({ project, onCategoryClick }) => {
             {project.description}
           </p>
         </Link>
-
-        {/* Footer... */}
       </div>
     </div>
   );
@@ -179,16 +174,24 @@ const ProjectCard = ({ project, onCategoryClick }) => {
 
 // --- 🔥 主元件 ---
 export default function Projects() {
-  const [filter, setFilter] = useState("ALL"); // 狀態：目前篩選的類別
-  const [viewMode, setViewMode] = useState("GRID"); // 狀態：網格或列表
+  // 🔥 1. 狀態拆分：Category 和 Status 獨立管理
+  const [categoryFilter, setCategoryFilter] = useState("ALL");
+  const [statusFilter, setStatusFilter] = useState("ALL");
+  const [viewMode, setViewMode] = useState("GRID");
 
-  // 🔥 核心邏輯：篩選資料
+  // 🔥 2. 自動抓取所有不重複的 Status (用於產生篩選按鈕)
+  const allStatuses = ["ALL", ...new Set(projectsData.map((p) => p.status))];
+
+  // 🔥 3. 核心邏輯：雙重篩選 (Category AND Status)
   const filteredProjects = projectsData.filter((project) => {
-    if (filter === "ALL") return true;
-    return project.category === filter;
+    const matchCategory =
+      categoryFilter === "ALL" || project.category === categoryFilter;
+    const matchStatus =
+      statusFilter === "ALL" || project.status === statusFilter;
+    return matchCategory && matchStatus;
   });
 
-  const tabs = ["ALL", "CIVIL", "DEV", "HYBRID"];
+  const categoryTabs = ["ALL", "CIVIL", "DEV", "HYBRID"];
 
   return (
     <section
@@ -196,83 +199,170 @@ export default function Projects() {
       className="py-24 px-6 bg-slate-950 relative overflow-hidden min-h-screen"
     >
       <div className="max-w-7xl mx-auto">
-        {/* Header & Controls */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-slate-800 pb-6">
-          {/* Title */}
-          <div>
-            <h2 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
-              <Folder className="text-cyan-500" /> Selected_Works
-            </h2>
-            <div className="flex items-center gap-2 text-sm text-slate-500 font-mono">
-              <span>Showing {filteredProjects.length} projects</span>
-              {filter !== "ALL" && (
-                <span className="flex items-center gap-1 text-cyan-400">
-                  / Filtered by [{filter}]
-                  <button
-                    onClick={() => setFilter("ALL")}
-                    className="hover:text-white"
-                  >
-                    <X size={12} />
-                  </button>
-                </span>
-              )}
+        {/* --- Header Area --- */}
+        <div className="flex flex-col gap-6 mb-12 border-b border-slate-800 pb-6">
+          {/* Row 1: Title & Main Controls (Category & View) */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            {/* Title Section */}
+            <div>
+              <h2 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+                <Folder className="text-cyan-500" /> Selected_Works
+              </h2>
+              <div className="flex items-center gap-2 text-sm text-slate-500 font-mono">
+                <span>Showing {filteredProjects.length} projects</span>
+
+                {/* 顯示目前的篩選條件提示 */}
+                {(categoryFilter !== "ALL" || statusFilter !== "ALL") && (
+                  <span className="flex items-center gap-1 text-cyan-400">
+                    / Filter:
+                    {categoryFilter !== "ALL" && ` [${categoryFilter}]`}
+                    {statusFilter !== "ALL" && ` [${statusFilter}]`}
+                    <button
+                      onClick={() => {
+                        setCategoryFilter("ALL");
+                        setStatusFilter("ALL");
+                      }}
+                      className="ml-2 hover:text-white flex items-center gap-1 border border-slate-700 px-1 rounded bg-slate-800"
+                    >
+                      <X size={10} /> CLEAR
+                    </button>
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Controls Section */}
+            <div className="flex items-center gap-4">
+              {/* Category Tabs */}
+              <div className="flex p-1 bg-slate-900 border border-slate-800 rounded-lg">
+                {categoryTabs.map((tab) => {
+                  const isActive = categoryFilter === tab;
+                  return (
+                    <button
+                      key={tab}
+                      onClick={() => setCategoryFilter(tab)}
+                      className={`
+                        relative px-4 py-2 rounded text-[10px] font-mono font-bold tracking-widest uppercase transition-all
+                        ${
+                          isActive
+                            ? "bg-cyan-500/10 text-cyan-400 shadow-[inset_0_0_10px_rgba(6,182,212,0.1)]"
+                            : "text-slate-500 hover:text-slate-300 hover:bg-slate-800/50"
+                        }
+                      `}
+                    >
+                      {tab}
+                      {isActive && (
+                        <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-cyan-400"></span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="w-px h-8 bg-slate-800"></div>
+
+              {/* View Toggle */}
+              <div className="flex p-1 bg-slate-900 border border-slate-800 rounded-lg">
+                <button
+                  onClick={() => setViewMode("GRID")}
+                  className={`p-2 rounded transition-all ${
+                    viewMode === "GRID"
+                      ? "bg-slate-800 text-cyan-400"
+                      : "text-slate-500 hover:text-slate-300"
+                  }`}
+                >
+                  <LayoutGrid size={16} />
+                </button>
+                <button
+                  onClick={() => setViewMode("LIST")}
+                  className={`p-2 rounded transition-all ${
+                    viewMode === "LIST"
+                      ? "bg-slate-800 text-cyan-400"
+                      : "text-slate-500 hover:text-slate-300"
+                  }`}
+                >
+                  <List size={16} />
+                </button>
+              </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            {/* 🔥 分類篩選按鈕 (Filter Tabs) */}
-            <div className="flex p-1 bg-slate-900 border border-slate-800 rounded-lg">
-              {tabs.map((tab) => {
-                const isActive = filter === tab;
-                return (
-                  <button
-                    key={tab}
-                    onClick={() => setFilter(tab)}
-                    className={`
-                      relative px-4 py-2 rounded text-[10px] font-mono font-bold tracking-widest uppercase transition-all
-                      ${
-                        isActive
-                          ? "bg-cyan-500/10 text-cyan-400 shadow-[inset_0_0_10px_rgba(6,182,212,0.1)]"
-                          : "text-slate-500 hover:text-slate-300 hover:bg-slate-800/50"
-                      }
-                    `}
+          {/* 🔥 Row 2: Status Filter Bar (新增的區域) */}
+          <div className="flex flex-wrap items-center gap-2 pt-2">
+            <div className="flex items-center gap-2 text-[10px] font-mono text-slate-500 mr-2">
+              <Layers size={12} /> STATUS_FILTER:
+            </div>
+
+            {allStatuses.map((status) => {
+              const isSelected = statusFilter === status;
+              const config = getStatusConfig(status);
+
+              // 計算數量 (基於目前的 Category Filter)
+              // 這樣做的好處：當你選 DEV 時，Status 的數量會自動變成只剩 DEV 的數量
+              const count =
+                status === "ALL"
+                  ? categoryFilter === "ALL"
+                    ? projectsData.length
+                    : projectsData.filter((p) => p.category === categoryFilter)
+                        .length
+                  : projectsData.filter(
+                      (p) =>
+                        p.status === status &&
+                        (categoryFilter === "ALL" ||
+                          p.category === categoryFilter),
+                    ).length;
+
+              // 如果數量為 0，可以選擇隱藏或變淡 (這裡選擇變淡)
+              const isZero = count === 0;
+
+              return (
+                <button
+                  key={status}
+                  onClick={() => setStatusFilter(status)}
+                  disabled={isZero}
+                  className={`
+                    px-3 py-1.5 rounded text-[10px] font-mono border transition-all duration-300 flex items-center gap-2
+                    ${
+                      isSelected
+                        ? config.style + " shadow-md" // 選中時套用該狀態的顏色樣式
+                        : "bg-slate-900 border-slate-800 text-slate-500 hover:border-slate-600 hover:text-slate-300" // 未選中
+                    }
+                    ${isZero ? "opacity-30 cursor-not-allowed" : "opacity-100"}
+                  `}
+                >
+                  {status}
+                  <span
+                    className={`opacity-60 ${isSelected ? "text-current" : "text-slate-600"}`}
                   >
-                    {tab}
-                    {isActive && (
-                      <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-cyan-400"></span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="w-px h-8 bg-slate-800"></div>
-
-            {/* 視圖切換按鈕 (View Toggle) */}
-            <div className="flex p-1 bg-slate-900 border border-slate-800 rounded-lg">
-              <button
-                onClick={() => setViewMode("GRID")}
-                className={`p-2 rounded transition-all ${viewMode === "GRID" ? "bg-slate-800 text-cyan-400" : "text-slate-500 hover:text-slate-300"}`}
-              >
-                <LayoutGrid size={16} />
-              </button>
-              <button
-                onClick={() => setViewMode("LIST")}
-                className={`p-2 rounded transition-all ${viewMode === "LIST" ? "bg-slate-800 text-cyan-400" : "text-slate-500 hover:text-slate-300"}`}
-              >
-                <List size={16} />
-              </button>
-            </div>
+                    [{count}]
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
         {/* 內容顯示區 */}
         <div className="min-h-[400px]">
-          {/* 如果篩選結果為空 */}
+          {/* Empty State */}
           {filteredProjects.length === 0 && (
             <div className="flex flex-col items-center justify-center py-20 text-slate-600 font-mono border border-dashed border-slate-800 rounded-lg">
               <Filter size={48} className="mb-4 opacity-50" />
-              <p>NO_DATA_FOUND_IN_CATEGORY: {filter}</p>
+              <p>NO_DATA_FOUND</p>
+              <p className="text-xs mt-2">
+                Category:{" "}
+                <span className="text-cyan-500">{categoryFilter}</span> +
+                Status: <span className="text-cyan-500">{statusFilter}</span>
+              </p>
+              <button
+                onClick={() => {
+                  setCategoryFilter("ALL");
+                  setStatusFilter("ALL");
+                }}
+                className="mt-6 text-xs text-cyan-400 hover:text-white border-b border-cyan-500/50 pb-0.5"
+              >
+                RESET_ALL_FILTERS
+              </button>
             </div>
           )}
 
@@ -283,8 +373,8 @@ export default function Projects() {
                 <ProjectCard
                   key={project.id}
                   project={project}
-                  onCategoryClick={setFilter}
-                /> // 傳入篩選函式
+                  onCategoryClick={setCategoryFilter} // 🔥 修正：傳入正確的 setter
+                />
               ))}
             </div>
           )}
@@ -296,8 +386,8 @@ export default function Projects() {
                 <ProjectListRow
                   key={project.id}
                   project={project}
-                  onCategoryClick={setFilter}
-                /> // 傳入篩選函式
+                  onCategoryClick={setCategoryFilter} // 🔥 修正：傳入正確的 setter
+                />
               ))}
             </div>
           )}
