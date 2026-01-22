@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
+import TerminalWidget from "@/components/TerminalWidget";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +17,10 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/icon/BSC.png"></link>
         <link rel="apple-touch-icon" href="/icon/BSC.png"></link>
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        {children}
+        <TerminalWidget></TerminalWidget>
+      </body>
     </html>
   );
 }
