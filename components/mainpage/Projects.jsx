@@ -16,44 +16,7 @@ import {
   Layers, // 新增 Layers icon
 } from "lucide-react";
 import { projectsData } from "@/app/lib/data";
-
-// --- 共用樣式設定 (保持不變) ---
-const getStatusConfig = (status) => {
-  switch (status) {
-    case "DEPLOYED":
-    case "PUBLISHED": // 相容不同命名
-    case "LIVE":
-      return {
-        style: "bg-emerald-950/40 text-emerald-400 border-emerald-500/30",
-        dot: "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]",
-      };
-    case "BETA":
-      return {
-        style: "bg-amber-950/40 text-amber-400 border-amber-500/30",
-        dot: "bg-amber-400 animate-pulse",
-      };
-    case "PROTOTYPE":
-      return {
-        style: "bg-cyan-950/40 text-cyan-400 border-cyan-500/30",
-        dot: "bg-cyan-400",
-      };
-    case "RESEARCH":
-      return {
-        style: "bg-blue-950/40 text-blue-400 border-blue-500/30",
-        dot: "bg-blue-400",
-      };
-    case "EXPERIMENTAL":
-      return {
-        style: "bg-pink-950/40 text-pink-400 border-pink-500/30",
-        dot: "bg-pink-400",
-      };
-    default:
-      return {
-        style: "bg-slate-900 text-slate-500 border-slate-800",
-        dot: "bg-slate-600",
-      };
-  }
-};
+import { getStatusConfig } from "@/app/lib/utils";
 
 // --- 子元件：列表模式的一列 (保持不變) ---
 const ProjectListRow = ({ project, onCategoryClick }) => {

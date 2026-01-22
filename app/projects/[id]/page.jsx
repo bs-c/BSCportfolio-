@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { projectsData } from "../../lib/data";
 import { YouTubeEmbed } from "@next/third-parties/google";
+import { getStatusConfig } from "@/app/lib/utils";
 
 // --- VideoPlayer 元件 (保持不變) ---
 const VideoPlayer = ({ src }) => {
@@ -148,7 +149,13 @@ export default function ProjectDetail({ params }) {
           <div className="flex items-center gap-3 text-cyan-500 mb-4 font-mono text-sm tracking-widest">
             <CategoryIcon size={18} />
             <span>PROJECT_ID: {project.id.toUpperCase()}</span>
-            <span className="px-2 py-0.5 border border-cyan-900 bg-cyan-950/30 text-[10px] rounded text-cyan-300">
+
+            <span
+              className={`flex items-center gap-2 px-2 py-0.5 rounded border ${getStatusConfig(project.status).style}`}
+            >
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${getStatusConfig(project.status).dot} shadow-sm`}
+              ></span>
               {project.status}
             </span>
           </div>

@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "BSC's Portfolio | Engineer & Developer",
   description:
-    "Portfolio of a Structural Engineer turned Full-Stack Developer.",
+    "Bridging the gap between Structural Engineering and Software Development. Specializing in BIM Automation, FEM Analysis, and Modern Digital Tech.",
 };
 
 export default function RootLayout({ children }) {
@@ -14,6 +14,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className="scroll-smooth">
       <head>
         <link rel="icon" href="/icon/BSC.png"></link>
+        <link rel="apple-touch-icon" href="/icon/BSC.png"></link>
       </head>
       <body className={inter.className}>{children}</body>
     </html>

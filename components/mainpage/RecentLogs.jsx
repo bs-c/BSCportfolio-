@@ -21,7 +21,7 @@ export default function RecentLogs({ posts = [] }) {
           href="/blog"
           className="hidden md:flex items-center gap-2 text-slate-500 hover:text-cyan-400 transition-colors font-mono text-sm"
         >
-          [ VIEW_ALL_LOGS ] <ArrowRight size={16} />
+          [ VIEW_ALL_BLOGS ] <ArrowRight size={16} />
         </Link>
       </div>
 
