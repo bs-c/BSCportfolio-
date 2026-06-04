@@ -30,7 +30,7 @@ export const projectsData = [
         caption: "FIG_01: User Interface ",
       },
       {
-        src: "/projects/TTaiwanTimberCodeChecker/TaiwanTimberCodeChecker-2.png",
+        src: "/projects/TaiwanTimberCodeChecker/TaiwanTimberCodeChecker-2.png",
         caption: "FIG_02: Calculation Basis",
       },],
   },
