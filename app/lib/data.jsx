@@ -2,6 +2,39 @@
 
 export const projectsData = [
   {
+    id: "TaiwanTimberCodeChecker",
+    title: "Taiwan Timber Code: Wood Member Design Checker",
+    cover:"/projects/TaiwanTimberCodeChecker/TaiwanTimberCodeChecker-1.png",
+    category: "HYBRID",
+    subtitle:
+      "A web-based structural verification tool implementing Taiwan's Building Code for timber members, covering standard and fire-resistance design checks.",
+    description:
+      "A fully client-side web application that automates the structural verification of rectangular timber members per Taiwan Building Code. Handles material input, multi-case load combinations, and fire-resistance design with automatic char-depth section reduction.",
+    challenge:
+      "Structural verification of timber members under Taiwan's Building Code requires cross-referencing multiple tables—species classification, allowable stresses, slenderness reduction factors—while simultaneously performing multi-stage calculations for bending, shear, combined stress, and lateral buckling. Fire-resistance scenarios add further complexity, as the effective section must be reduced per charring depth based on the number of exposed faces. Manually navigating these interdependent calculations is tedious and error-prone.",
+    solution:
+      "A fully client-side web application that consolidates all verification workflows into a single interactive tool. Users input material properties, section dimensions, and load cases (long-term, short-term, and fire), and the system instantly computes safety ratios for all required checks. Fire design checks automatically reduce the effective section based on the number of exposed faces and re-run all verifications against fire-load combinations.",
+    features: [
+      "Five-check verification engine covering section properties, long-term / short-term allowable stress, slenderness ratio & three-stage buckling reduction (≤30, 30–100, >100), bending modification factors (size & lateral buckling), and combined stress ratios.",
+      "Integrated fire-resistance module that calculates char-depth section reduction for 3-face, and 4-face fire exposure, then re-runs all checks against short-term allowable stresses scaled for fire loading.",
+      "One-click PDF calculation sheet export, producing a print-ready document for design submissions and client presentations.",
+    ],
+    tech: ["JavaScript", "HTML/CSS"],
+    demoVideo: ["https://youtu.be/-cL39BgUgmI"],
+    link: "https://bs-c.github.io/TaiwanTimberCode_Demo/",
+    github: "https://github.com/bs-c/TaiwanTimberCode_Demo",
+    status: "DEPLOYED",
+    images: [      
+      {
+        src: "/projects/TaiwanTimberCodeChecker/TaiwanTimberCodeChecker-1.png",
+        caption: "FIG_01: User Interface ",
+      },
+      {
+        src: "/projects/TimeberExpertSystem/TimeberExpertSystem-2.png",
+        caption: "FIG_02: Calculation Basis",
+      },],
+  },
+  {
     id: "TimeberExpertSystem", // 這是網址會用到的 slug (唯一識別碼)
     title: "Online Timber Expert System",
     cover: "/projects/TimeberExpertSystem/TimeberExpertSystem-1.png",

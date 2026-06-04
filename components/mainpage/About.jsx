@@ -170,8 +170,8 @@ export default function About({ SectionTitle }) {
                   M.S. in Architecture
                 </h4>
                 <div className="text-sm font-mono text-slate-500 mb-1">
-                  National Taiwan University of Science and Technology ·
-                  Expected 2026
+                  National Taiwan University of Science and Technology · 2026
+                 
                 </div>
               </div>
               <div className="relative group">

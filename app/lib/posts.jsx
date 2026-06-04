@@ -42,7 +42,7 @@ export function getPostData(id) {
   const fullPath = path.join(postsDirectory, `${id}.md`);
 
   if (!fs.existsSync(fullPath)) {
-    return null; // 如果找不到檔案，優雅地回傳 null，不要讓程式當機
+    return null; // 如果找不到檔案，回傳 null，不要讓程式當機
   }
 
   const fileContents = fs.readFileSync(fullPath, "utf8");
