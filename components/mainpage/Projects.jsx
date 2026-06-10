@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
+import { useLang } from "@/app/lib/LanguageContext";
+import { t } from "@/app/lib/translations";
 import Link from "next/link";
 import {
   Folder,
-  Github,
   ExternalLink,
   Code,
   Box,
@@ -13,7 +14,7 @@ import {
   List,
   Filter,
   X,
-  Layers, // 新增 Layers icon
+  Layers,
 } from "lucide-react";
 import { projectsData } from "@/app/lib/data";
 import { getStatusConfig } from "@/app/lib/utils";
@@ -35,7 +36,7 @@ const ProjectListRow = ({ project, onCategoryClick }) => {
       </div>
 
       {/* Title (Link) */}
-      <div className="w-1/4 min-w-[200px]">
+      <div className="w-1/4 min-w-50">
         <Link href={`/projects/${project.id}`} className="block">
           <h3 className="text-sm font-bold text-slate-300 group-hover:text-cyan-400 transition-colors truncate cursor-pointer">
             {project.title}
@@ -82,7 +83,7 @@ const ProjectCard = ({ project, onCategoryClick }) => {
   const config = getStatusConfig(project.status);
 
   return (
-    <div className="block h-full group relative bg-slate-900/40 border border-slate-800 hover:border-cyan-500/50 rounded-lg p-6 transition-all duration-500 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] hover:-translate-y-1 overflow-hidden flex flex-col">
+    <div className="h-full group relative bg-slate-900/40 border border-slate-800 hover:border-cyan-500/50 rounded-lg p-6 transition-all duration-500 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] hover:-translate-y-1 overflow-hidden flex flex-col">
       {/* 背景圖片層 */}
       {project.cover && (
         <>
@@ -93,7 +94,7 @@ const ProjectCard = ({ project, onCategoryClick }) => {
               className="w-full h-full object-cover opacity-0 group-hover:opacity-20 transition-opacity duration-500 grayscale group-hover:grayscale-0"
             />
           </div>
-          <div className="absolute inset-0 z-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-slate-950/40 opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
+          <div className="absolute inset-0 z-0 bg-linear-to-t from-slate-950 via-slate-950/80 to-slate-950/40 opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
         </>
       )}
 
@@ -137,7 +138,9 @@ const ProjectCard = ({ project, onCategoryClick }) => {
 
 // --- 🔥 主元件 ---
 export default function Projects() {
-  // 🔥 1. 狀態拆分：Category 和 Status 獨立管理
+  const { lang } = useLang();
+  const p = t[lang].projects;
+
   const [categoryFilter, setCategoryFilter] = useState("ALL");
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [viewMode, setViewMode] = useState("GRID");
@@ -169,15 +172,15 @@ export default function Projects() {
             {/* Title Section */}
             <div>
               <h2 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
-                <Folder className="text-cyan-500" /> Selected_Works
+                <Folder className="text-cyan-500" /> {p.title}
               </h2>
               <div className="flex items-center gap-2 text-sm text-slate-500 font-mono">
-                <span>Showing {filteredProjects.length} projects</span>
+                <span>{p.showing(filteredProjects.length)}</span>
 
                 {/* 顯示目前的篩選條件提示 */}
                 {(categoryFilter !== "ALL" || statusFilter !== "ALL") && (
                   <span className="flex items-center gap-1 text-cyan-400">
-                    / Filter:
+                    / {p.filterLabel}
                     {categoryFilter !== "ALL" && ` [${categoryFilter}]`}
                     {statusFilter !== "ALL" && ` [${statusFilter}]`}
                     <button
@@ -187,7 +190,7 @@ export default function Projects() {
                       }}
                       className="ml-2 hover:text-white flex items-center gap-1 border border-slate-700 px-1 rounded bg-slate-800"
                     >
-                      <X size={10} /> CLEAR
+                      <X size={10} /> {p.clear}
                     </button>
                   </span>
                 )}
@@ -306,7 +309,7 @@ export default function Projects() {
         </div>
 
         {/* 內容顯示區 */}
-        <div className="min-h-[400px]">
+        <div className="min-h-100">
           {/* Empty State */}
           {filteredProjects.length === 0 && (
             <div className="flex flex-col items-center justify-center py-20 text-slate-600 font-mono border border-dashed border-slate-800 rounded-lg">

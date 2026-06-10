@@ -1,6 +1,36 @@
 // app/data.js (或 lib/data.js)
 
 export const projectsData = [
+   {
+    id: "TimberCodeAI",
+    title: "TimberCode AI: Conversational Structural Code Assistant",
+    cover:"/projects/TimberCodeAI/TimberCodeAI-1.png",
+    category: "HYBRID",
+    subtitle:
+      "Conversational Structural Code Assistant powered by Gemini Function Calling.",
+    description:
+      "An LLM-powered assistant that bridges natural language queries with deterministic engineering calculations for Taiwan timber design code. Built on a 'LLM handles language, Python handles facts' architecture—the language model interprets intent and orchestrates responses, while every numerical result, code citation, and member check is grounded in verified Python logic. The goal: eliminate numerical hallucination, the single most dangerous failure mode when AI meets engineering codes.",
+    challenge:
+      "Timber structural design in Taiwan demands fluent navigation of Taiwan Timber Code provisions, multi-case load combinations, and fire-resistance char-depth reductions—a steep barrier for engineers unfamiliar with wood as a structural material. A naive ChatGPT-style assistant cannot solve this: large language models routinely fabricate clause numbers, miscalculate section properties, and invent design equations that look authoritative but are wrong. In structural engineering, a hallucinated allowable stress isn't a quirky AI mistake—it's a liability. The challenge was to expose the conversational power of LLMs to junior engineers and students, without ever letting the model touch the math.",
+    solution:
+      "I architected TimberCode AI around a strict separation of duties: Gemini serves only as the natural-language interface and tool orchestrator, while all engineering logic lives in a deterministic Python core—the same verified functions that power Taiwan Timber Code Checker. When a user describes a design scenario in plain Chinese or English, the LLM parses intent, extracts parameters (member dimensions, species, load combinations, fire rating), and invokes the corresponding Python function via Gemini Function Calling. The function returns structured results with explicit clause references, which the LLM then narrates back to the user. The model never computes; it only translates. This design—closer to a structured agent than a chatbot—reduces hallucination on numerical and code-citation tasks to effectively zero, because the LLM has no opportunity to invent numbers it isn't allowed to produce.",
+    features: [
+  "Function Calling over RAG — engineering logic is invoked as deterministic Python tools, not retrieved as text, eliminating numerical and citation hallucination",
+  "Bilingual conversational intake — describe a member, load combination, or fire scenario in plain Chinese or English; the assistant extracts structured parameters and routes them to the correct check",
+  "Auditable output by design — every numerical result is paired with the Python function that produced it and the code clause it cites, so answers are traceable rather than opaque"
+    ],
+    tech: ["Python", "Streamlit","LLM","Function Calling","Gemini API"],
+    demoVideo: ["https://www.youtube.com/watch?v=v9Wo87AF09s"],
+    link: "https://bs-c.github.io/TaiwanTimberCode_Demo/",
+    github: null,
+    status: "BETA",
+    images: [      
+      {
+        src: "/projects/TimberCodeAI/TimberCodeAI-1.png",
+        caption: "FIG_01: User Interface ",
+      },
+],
+  },
   {
     id: "TaiwanTimberCodeChecker",
     title: "Taiwan Timber Code: Wood Member Design Checker",

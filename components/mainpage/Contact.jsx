@@ -1,29 +1,20 @@
+"use client";
 import React from "react";
-import { Github, Linkedin, Mail } from "lucide-react";
+import { Linkedin, Mail } from "lucide-react";
+import { useLang } from "@/app/lib/LanguageContext";
+import { t } from "@/app/lib/translations";
 
 export default function Contact() {
+  const { lang } = useLang();
+  const c = t[lang].contact;
+
   return (
-    <section
-      id="contact"
-      className="py-24 bg-slate-950 px-6 border-t border-slate-900"
-    >
+    <section id="contact" className="py-24 bg-slate-950 px-6 border-t border-slate-900">
       <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
-          Ready to Collaborate?
-        </h2>
-        <p className="text-slate-400 text-lg mb-12 max-w-2xl mx-auto">
-          Whether you need a custom engineering tool, a 3D web visualizer, or
-          just want to talk about snowboarding, diving or motorcycling —my inbox
-          is open.
-        </p>
+        <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">{c.title}</h2>
+        <p className="text-slate-400 text-lg mb-12 max-w-2xl mx-auto">{c.desc}</p>
 
         <div className="flex justify-center gap-6 mb-16">
-          {/* <a
-          href="#"
-          className="p-4 border border-slate-800 rounded-full hover:border-cyan-500 hover:text-cyan-400 text-slate-400 transition-all"
-        >
-          <Github size={24} />
-        </a> */}
           <a
             href="https://www.linkedin.com/in/bo-sen-chuang-b3345b222"
             target="_blank"
@@ -40,7 +31,7 @@ export default function Contact() {
         </div>
 
         <footer className="text-slate-600 text-sm font-mono">
-          &copy; {new Date().getFullYear()} Designed & Built by BSC.
+          &copy; {new Date().getFullYear()} Designed &amp; Built by BSC.
         </footer>
       </div>
     </section>
