@@ -19,266 +19,187 @@ import {
 import { projectsData } from "@/app/lib/data";
 import { getStatusConfig } from "@/app/lib/utils";
 
-// --- 子元件：列表模式的一列 (保持不變) ---
+// Category icon helper
+const CatIcon = ({ cat, size = 16 }) => {
+  if (cat === "CIVIL") return <Box size={size} />;
+  if (cat === "DEV")   return <Code size={size} />;
+  return <Cpu size={size} />;
+};
+
+// --- List row ---
 const ProjectListRow = ({ project, onCategoryClick }) => {
   const config = getStatusConfig(project.status);
-
   return (
-    <div className="group flex items-center gap-4 p-4 border-b border-slate-800/50 hover:bg-slate-900/80 transition-all duration-300 hover:border-l-2 hover:border-l-cyan-500">
-      {/* Status */}
+    <div className="group flex items-center gap-4 py-4 px-4 border-b border-line hover:bg-subtle transition-colors duration-200">
       <div className="w-24 shrink-0 flex items-center gap-2">
-        <span className={`w-1.5 h-1.5 rounded-full ${config.dot}`}></span>
-        <span
-          className={`text-[10px] font-mono ${config.style.replace("border", "").replace("bg-", "text-")} opacity-70`}
-        >
-          {project.status}
-        </span>
+        <span className={`w-2 h-2 rounded-full ${config.dot}`} />
+        <span className="font-mono text-[10px] text-muted">{project.status}</span>
       </div>
-
-      {/* Title (Link) */}
       <div className="w-1/4 min-w-50">
         <Link href={`/projects/${project.id}`} className="block">
-          <h3 className="text-sm font-bold text-slate-300 group-hover:text-cyan-400 transition-colors truncate cursor-pointer">
+          <h3 className="text-sm font-semibold text-primary group-hover:text-accent transition-colors truncate">
             {project.title}
           </h3>
         </Link>
       </div>
-
-      {/* Category (Clickable Filter) */}
       <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onCategoryClick(project.category);
-        }}
-        className="shrink-0 flex items-center gap-1 px-2 py-1 rounded border border-slate-800 bg-slate-950/50 text-[10px] font-mono text-slate-500 hover:text-cyan-400 hover:border-cyan-500/50 transition-colors"
+        onClick={e => { e.stopPropagation(); onCategoryClick(project.category); }}
+        className="shrink-0 flex items-center gap-1 px-2 py-1 rounded border border-line text-[10px] font-mono text-muted hover:text-accent hover:border-accent/50 transition-colors"
       >
-        {project.category === "CIVIL" && <Box size={12} />}
-        {project.category === "DEV" && <Code size={12} />}
-        {project.category === "HYBRID" && <Cpu size={12} />}
+        <CatIcon cat={project.category} size={11} />
         {project.category}
       </button>
-
-      {/* Tech Stack */}
-      <div className="flex-1 flex flex-wrap gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
-        {project.tech.slice(0, 4).map((t, i) => (
-          <span key={i} className="text-[10px] font-mono text-slate-500">
-            {t}
-            {i < 3 ? "," : ""}
+      <div className="flex-1 flex flex-wrap gap-2 opacity-40 group-hover:opacity-100 transition-opacity">
+        {project.tech.slice(0, 4).map((tech, i) => (
+          <span key={i} className="text-[10px] font-mono text-muted">
+            {tech}{i < 3 ? "," : ""}
           </span>
         ))}
       </div>
-
-      <Link
-        href={`/projects/${project.id}`}
-        className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity -translate-x-2 group-hover:translate-x-0 duration-300"
-      >
-        <ExternalLink size={14} className="text-cyan-500" />
+      <Link href={`/projects/${project.id}`} className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+        <ExternalLink size={14} className="text-accent" />
       </Link>
     </div>
   );
 };
 
-// --- 子元件：網格模式的卡片 (保持不變) ---
+// --- Grid card ---
 const ProjectCard = ({ project, onCategoryClick }) => {
   const config = getStatusConfig(project.status);
-
   return (
-    <div className="h-full group relative bg-slate-900/40 border border-slate-800 hover:border-cyan-500/50 rounded-lg p-6 transition-all duration-500 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] hover:-translate-y-1 overflow-hidden flex flex-col">
-      {/* 背景圖片層 */}
+    <div className="group relative bg-card border border-line hover:border-line-strong rounded-lg p-6 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 overflow-hidden flex flex-col">
       {project.cover && (
-        <>
-          <div className="absolute inset-0 z-0">
-            <img
-              src={project.cover}
-              alt={project.title}
-              className="w-full h-full object-cover opacity-0 group-hover:opacity-20 transition-opacity duration-500 grayscale group-hover:grayscale-0"
-            />
-          </div>
-          <div className="absolute inset-0 z-0 bg-linear-to-t from-slate-950 via-slate-950/80 to-slate-950/40 opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
-        </>
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <img src={project.cover} alt={project.title} className="w-full h-full object-cover opacity-0 group-hover:opacity-10 transition-opacity duration-500 grayscale" />
+          <div className="absolute inset-0 bg-linear-to-t from-card via-card/90 to-card/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        </div>
       )}
 
       <div className="relative z-10 flex flex-col h-full">
-        <div className="flex justify-between items-start mb-4">
+        <div className="flex justify-between items-start mb-5">
           <button
-            onClick={(e) => {
-              e.preventDefault();
-              onCategoryClick(project.category);
-            }}
-            className="p-2 bg-slate-950/80 backdrop-blur-sm rounded-md border border-slate-800 text-cyan-500 hover:bg-cyan-950/30 hover:border-cyan-500 transition-all"
-            title={`Filter by ${project.category}`}
+            onClick={e => { e.preventDefault(); onCategoryClick(project.category); }}
+            className="p-1.5 border border-line rounded text-muted hover:text-accent hover:border-accent/50 transition-all"
           >
-            {project.category === "CIVIL" && <Box size={20} />}
-            {project.category === "DEV" && <Code size={20} />}
-            {project.category === "HYBRID" && <Cpu size={20} />}
+            <CatIcon cat={project.category} size={16} />
           </button>
-
-          <div
-            className={`flex items-center gap-2 px-2 py-1 rounded border text-[10px] font-mono font-bold tracking-wider ${config.style}`}
-          >
-            <span
-              className={`w-1.5 h-1.5 rounded-full ${config.dot} shadow-sm`}
-            ></span>
+          <div className={`flex items-center gap-1.5 px-2 py-1 rounded border text-[10px] font-mono font-medium ${config.style}`}>
+            <span className={`w-1.5 h-1.5 rounded-full ${config.dot}`} />
             {project.status}
           </div>
         </div>
 
         <Link href={`/projects/${project.id}`} className="block flex-1">
-          <h3 className="text-xl font-bold text-slate-100 mb-2 group-hover:text-cyan-400 transition-colors">
+          <h3 className="text-[16px] font-semibold text-primary mb-2 group-hover:text-accent transition-colors tracking-tight">
             {project.title}
           </h3>
-          <p className="text-slate-400 text-sm leading-relaxed mb-6 line-clamp-3">
-            {project.description}
-          </p>
+          <p className="text-secondary text-[13px] leading-relaxed line-clamp-3">{project.description}</p>
         </Link>
       </div>
     </div>
   );
 };
 
-// --- 🔥 主元件 ---
+// --- Main ---
 export default function Projects() {
   const { lang } = useLang();
   const p = t[lang].projects;
 
   const [categoryFilter, setCategoryFilter] = useState("ALL");
-  const [statusFilter, setStatusFilter] = useState("ALL");
-  const [viewMode, setViewMode] = useState("GRID");
+  const [statusFilter, setStatusFilter]     = useState("ALL");
+  const [viewMode, setViewMode]             = useState("GRID");
 
-  // 🔥 2. 自動抓取所有不重複的 Status (用於產生篩選按鈕)
-  const allStatuses = ["ALL", ...new Set(projectsData.map((p) => p.status))];
-
-  // 🔥 3. 核心邏輯：雙重篩選 (Category AND Status)
-  const filteredProjects = projectsData.filter((project) => {
-    const matchCategory =
-      categoryFilter === "ALL" || project.category === categoryFilter;
-    const matchStatus =
-      statusFilter === "ALL" || project.status === statusFilter;
-    return matchCategory && matchStatus;
+  const allStatuses = ["ALL", ...new Set(projectsData.map(p => p.status))];
+  const filteredProjects = projectsData.filter(project => {
+    const matchCat    = categoryFilter === "ALL" || project.category === categoryFilter;
+    const matchStatus = statusFilter   === "ALL" || project.status   === statusFilter;
+    return matchCat && matchStatus;
   });
 
   const categoryTabs = ["ALL", "CIVIL", "DEV", "HYBRID"];
 
   return (
-    <section
-      id="projects"
-      className="py-24 px-6 bg-slate-950 relative overflow-hidden min-h-screen"
-    >
+    <section id="projects" className="py-24 px-6 bg-bg border-b border-line">
       <div className="max-w-7xl mx-auto">
-        {/* --- Header Area --- */}
-        <div className="flex flex-col gap-6 mb-12 border-b border-slate-800 pb-6">
-          {/* Row 1: Title & Main Controls (Category & View) */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            {/* Title Section */}
-            <div>
-              <h2 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
-                <Folder className="text-cyan-500" /> {p.title}
-              </h2>
-              <div className="flex items-center gap-2 text-sm text-slate-500 font-mono">
-                <span>{p.showing(filteredProjects.length)}</span>
 
-                {/* 顯示目前的篩選條件提示 */}
+        {/* Header */}
+        <div className="flex flex-col gap-5 mb-10 pb-6 border-b border-line">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+              <div className="flex items-center gap-2.5 font-mono text-[11px] text-muted tracking-[0.12em] uppercase mb-5">
+                <span className="w-4 h-px bg-line-strong inline-block" />
+                Portfolio
+              </div>
+              <h2 className="text-3xl font-bold text-primary tracking-tight flex items-center gap-3">
+                <Folder size={24} className="text-accent" /> {p.title}
+              </h2>
+              <div className="flex items-center gap-2 text-[13px] text-muted font-mono mt-2">
+                <span>{p.showing(filteredProjects.length)}</span>
                 {(categoryFilter !== "ALL" || statusFilter !== "ALL") && (
-                  <span className="flex items-center gap-1 text-cyan-400">
-                    / {p.filterLabel}
+                  <span className="flex items-center gap-1 text-accent">
+                    · {p.filterLabel}
                     {categoryFilter !== "ALL" && ` [${categoryFilter}]`}
-                    {statusFilter !== "ALL" && ` [${statusFilter}]`}
+                    {statusFilter   !== "ALL" && ` [${statusFilter}]`}
                     <button
-                      onClick={() => {
-                        setCategoryFilter("ALL");
-                        setStatusFilter("ALL");
-                      }}
-                      className="ml-2 hover:text-white flex items-center gap-1 border border-slate-700 px-1 rounded bg-slate-800"
+                      onClick={() => { setCategoryFilter("ALL"); setStatusFilter("ALL"); }}
+                      className="ml-1 flex items-center gap-0.5 border border-line-strong px-1.5 py-0.5 rounded text-[10px] hover:border-primary hover:text-primary transition-colors"
                     >
-                      <X size={10} /> {p.clear}
+                      <X size={9} /> {p.clear}
                     </button>
                   </span>
                 )}
               </div>
             </div>
 
-            {/* Controls Section */}
-            <div className="flex items-center gap-4">
-              {/* Category Tabs */}
-              <div className="flex p-1 bg-slate-900 border border-slate-800 rounded-lg">
-                {categoryTabs.map((tab) => {
-                  const isActive = categoryFilter === tab;
-                  return (
-                    <button
-                      key={tab}
-                      onClick={() => setCategoryFilter(tab)}
-                      className={`
-                        relative px-4 py-2 rounded text-[10px] font-mono font-bold tracking-widest uppercase transition-all
-                        ${
-                          isActive
-                            ? "bg-cyan-500/10 text-cyan-400 shadow-[inset_0_0_10px_rgba(6,182,212,0.1)]"
-                            : "text-slate-500 hover:text-slate-300 hover:bg-slate-800/50"
-                        }
-                      `}
-                    >
-                      {tab}
-                      {isActive && (
-                        <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-cyan-400"></span>
-                      )}
-                    </button>
-                  );
-                })}
+            <div className="flex items-center gap-3">
+              {/* Category tabs */}
+              <div className="flex border border-line rounded-md overflow-hidden">
+                {categoryTabs.map(tab => (
+                  <button
+                    key={tab}
+                    onClick={() => setCategoryFilter(tab)}
+                    className={`px-4 py-2 text-[11px] font-mono tracking-widest transition-colors ${
+                      categoryFilter === tab
+                        ? "bg-primary text-bg"
+                        : "text-muted hover:text-primary hover:bg-subtle"
+                    }`}
+                  >
+                    {tab}
+                  </button>
+                ))}
               </div>
 
-              <div className="w-px h-8 bg-slate-800"></div>
+              <div className="w-px h-7 bg-line" />
 
-              {/* View Toggle */}
-              <div className="flex p-1 bg-slate-900 border border-slate-800 rounded-lg">
+              {/* View toggle */}
+              <div className="flex border border-line rounded-md overflow-hidden">
                 <button
                   onClick={() => setViewMode("GRID")}
-                  className={`p-2 rounded transition-all ${
-                    viewMode === "GRID"
-                      ? "bg-slate-800 text-cyan-400"
-                      : "text-slate-500 hover:text-slate-300"
-                  }`}
+                  className={`p-2 transition-colors ${viewMode === "GRID" ? "bg-primary text-bg" : "text-muted hover:text-primary"}`}
                 >
-                  <LayoutGrid size={16} />
+                  <LayoutGrid size={15} />
                 </button>
                 <button
                   onClick={() => setViewMode("LIST")}
-                  className={`p-2 rounded transition-all ${
-                    viewMode === "LIST"
-                      ? "bg-slate-800 text-cyan-400"
-                      : "text-slate-500 hover:text-slate-300"
-                  }`}
+                  className={`p-2 transition-colors ${viewMode === "LIST" ? "bg-primary text-bg" : "text-muted hover:text-primary"}`}
                 >
-                  <List size={16} />
+                  <List size={15} />
                 </button>
               </div>
             </div>
           </div>
 
-          {/* 🔥 Row 2: Status Filter Bar (新增的區域) */}
-          <div className="flex flex-wrap items-center gap-2 pt-2">
-            <div className="flex items-center gap-2 text-[10px] font-mono text-slate-500 mr-2">
-              <Layers size={12} /> STATUS_FILTER:
+          {/* Status filter */}
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-1.5 font-mono text-[10px] text-muted mr-1">
+              <Layers size={11} /> STATUS:
             </div>
-
-            {allStatuses.map((status) => {
+            {allStatuses.map(status => {
               const isSelected = statusFilter === status;
               const config = getStatusConfig(status);
-
-              // 計算數量 (基於目前的 Category Filter)
-              // 這樣做的好處：當你選 DEV 時，Status 的數量會自動變成只剩 DEV 的數量
-              const count =
-                status === "ALL"
-                  ? categoryFilter === "ALL"
-                    ? projectsData.length
-                    : projectsData.filter((p) => p.category === categoryFilter)
-                        .length
-                  : projectsData.filter(
-                      (p) =>
-                        p.status === status &&
-                        (categoryFilter === "ALL" ||
-                          p.category === categoryFilter),
-                    ).length;
-
-              // 如果數量為 0，可以選擇隱藏或變淡 (這裡選擇變淡)
+              const count = status === "ALL"
+                ? (categoryFilter === "ALL" ? projectsData.length : projectsData.filter(p => p.category === categoryFilter).length)
+                : projectsData.filter(p => p.status === status && (categoryFilter === "ALL" || p.category === categoryFilter)).length;
               const isZero = count === 0;
 
               return (
@@ -286,74 +207,45 @@ export default function Projects() {
                   key={status}
                   onClick={() => setStatusFilter(status)}
                   disabled={isZero}
-                  className={`
-                    px-3 py-1.5 rounded text-[10px] font-mono border transition-all duration-300 flex items-center gap-2
-                    ${
-                      isSelected
-                        ? config.style + " shadow-md" // 選中時套用該狀態的顏色樣式
-                        : "bg-slate-900 border-slate-800 text-slate-500 hover:border-slate-600 hover:text-slate-300" // 未選中
-                    }
-                    ${isZero ? "opacity-30 cursor-not-allowed" : "opacity-100"}
-                  `}
+                  className={`px-3 py-1 rounded text-[10px] font-mono border transition-all flex items-center gap-1.5
+                    ${isSelected ? config.style : "bg-card border-line text-muted hover:border-line-strong hover:text-secondary"}
+                    ${isZero ? "opacity-30 cursor-not-allowed" : ""}`}
                 >
                   {status}
-                  <span
-                    className={`opacity-60 ${isSelected ? "text-current" : "text-slate-600"}`}
-                  >
-                    [{count}]
-                  </span>
+                  <span className="opacity-60">[{count}]</span>
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* 內容顯示區 */}
+        {/* Content */}
         <div className="min-h-100">
-          {/* Empty State */}
           {filteredProjects.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-20 text-slate-600 font-mono border border-dashed border-slate-800 rounded-lg">
-              <Filter size={48} className="mb-4 opacity-50" />
-              <p>NO_DATA_FOUND</p>
-              <p className="text-xs mt-2">
-                Category:{" "}
-                <span className="text-cyan-500">{categoryFilter}</span> +
-                Status: <span className="text-cyan-500">{statusFilter}</span>
+            <div className="flex flex-col items-center justify-center py-20 text-muted font-mono border border-dashed border-line rounded-lg">
+              <Filter size={40} className="mb-4 opacity-40" />
+              <p className="text-sm">NO_DATA_FOUND</p>
+              <p className="text-[11px] mt-1 text-muted/70">
+                Category: <span className="text-accent">{categoryFilter}</span> · Status: <span className="text-accent">{statusFilter}</span>
               </p>
-              <button
-                onClick={() => {
-                  setCategoryFilter("ALL");
-                  setStatusFilter("ALL");
-                }}
-                className="mt-6 text-xs text-cyan-400 hover:text-white border-b border-cyan-500/50 pb-0.5"
-              >
+              <button onClick={() => { setCategoryFilter("ALL"); setStatusFilter("ALL"); }} className="mt-5 text-[12px] text-accent hover:text-primary border-b border-accent/40 pb-px">
                 RESET_ALL_FILTERS
               </button>
             </div>
           )}
 
-          {/* Grid Mode */}
           {viewMode === "GRID" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in duration-500">
-              {filteredProjects.map((project) => (
-                <ProjectCard
-                  key={project.id}
-                  project={project}
-                  onCategoryClick={setCategoryFilter} // 🔥 修正：傳入正確的 setter
-                />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {filteredProjects.map(project => (
+                <ProjectCard key={project.id} project={project} onCategoryClick={setCategoryFilter} />
               ))}
             </div>
           )}
 
-          {/* List Mode */}
           {viewMode === "LIST" && (
-            <div className="flex flex-col border-t border-slate-800 animate-in fade-in slide-in-from-bottom-2 duration-500">
-              {filteredProjects.map((project) => (
-                <ProjectListRow
-                  key={project.id}
-                  project={project}
-                  onCategoryClick={setCategoryFilter} // 🔥 修正：傳入正確的 setter
-                />
+            <div className="border border-line rounded-lg overflow-hidden">
+              {filteredProjects.map(project => (
+                <ProjectListRow key={project.id} project={project} onCategoryClick={setCategoryFilter} />
               ))}
             </div>
           )}

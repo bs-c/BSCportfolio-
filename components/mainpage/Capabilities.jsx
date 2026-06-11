@@ -3,55 +3,41 @@ import { Cpu, Hammer, Globe, Ruler } from "lucide-react";
 import { useLang } from "@/app/lib/LanguageContext";
 import { t } from "@/app/lib/translations";
 
-const ICONS = [
-  <Ruler size={32} />,
-  <Cpu size={32} />,
-  <Hammer size={32} />,
-  <Globe size={32} />,
+const ICONS = [<Ruler size={28} />, <Cpu size={28} />, <Hammer size={28} />, <Globe size={28} />];
+const ICON_COLORS = ["text-emerald-600", "text-blue-600", "text-purple-600", "text-accent"];
+const TOOLS = [
+  ["ETABS / SAP2000", "SAFE", "Midas Gen", "Revit", "AutoCAD", "Rhino"],
+  ["Grasshopper", "C#", "Python", "Karamba3D"],
+  ["C#", "Python", "Revit API", "Strategy"],
+  ["React", "Django", "Python (AI/ML)", "Node.js"],
 ];
-const COLORS = ["text-emerald-400", "text-blue-400", "text-purple-400", "text-cyan-400"];
 
 export default function Capabilities() {
   const { lang } = useLang();
   const c = t[lang].capabilities;
 
   return (
-    <section className="py-20" id="services">
+    <section id="services" className="py-24 bg-subtle border-b border-line">
       <div className="max-w-7xl mx-auto px-6">
-        {/* Section title */}
-        <div className="mb-16">
-          <div className="flex mb-4">
-            <span className="font-mono text-blue-400 text-sm tracking-widest uppercase">
-              {c.subtitle}
-            </span>
+        {/* Section header */}
+        <div className="mb-12">
+          <div className="flex items-center gap-2.5 font-mono text-[11px] text-muted tracking-[0.12em] uppercase mb-5">
+            <span className="w-4 h-px bg-line-strong inline-block" />
+            {c.subtitle}
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-100">{c.title}</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-primary tracking-tight">{c.title}</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-line border border-line rounded-lg overflow-hidden">
           {c.services.map((service, index) => (
-            <div
-              key={index}
-              className="group p-8 bg-slate-950/50 border border-slate-800 hover:border-slate-600 transition-all duration-300 rounded-lg hover:-translate-y-1 flex flex-col h-full"
-            >
-              <div className={`mb-6 ${COLORS[index]}`}>{ICONS[index]}</div>
-              <h4 className="text-xl font-bold text-slate-100 mb-4 group-hover:text-white transition-colors">
-                {service.title}
-              </h4>
-              <p className="text-slate-400 leading-relaxed mb-6 md:min-h-20">
-                {service.description}
-              </p>
+            <div key={index} className="bg-card p-8 hover:bg-bg transition-colors duration-200 flex flex-col">
+              <div className={`mb-5 ${ICON_COLORS[index]}`}>{ICONS[index]}</div>
+              <div className="font-mono text-[11px] text-muted mb-2 tracking-widest">0{index + 1}</div>
+              <h4 className="text-[18px] font-semibold text-primary mb-3 tracking-tight">{service.title}</h4>
+              <p className="text-secondary text-[14px] leading-relaxed mb-6 grow">{service.description}</p>
               <div className="flex flex-wrap gap-2 mt-auto">
-                {[
-                  ["ETABS/SAP2000/SAFE", "Midas Gen", "Revit", "AutoCAD", "Rhino", "SketchUP"],
-                  ["Grasshopper", "C#", "Python", "Karamba3D"],
-                  ["C#", "Python", "Revit", "Strategy"],
-                  ["C#", "Python(AI/ML)", "HTML/CSS/JS", "React", "Django", "Node.js"],
-                ][index].map((tool) => (
-                  <span
-                    key={tool}
-                    className="text-[10px] font-mono px-1.5 py-0.5 rounded border border-slate-700 text-slate-500 bg-slate-900 group-hover:border-slate-600 transition-colors"
-                  >
+                {TOOLS[index].map(tool => (
+                  <span key={tool} className="font-mono text-[10px] text-muted border border-line-strong px-2 py-0.5 rounded-sm">
                     {tool}
                   </span>
                 ))}

@@ -12,7 +12,7 @@ export default function Portfolio() {
   const allPosts = getSortedPostsData();
   const recentPosts = allPosts.slice(0, 3);
   return (
-    <div className="bg-slate-950 min-h-screen text-slate-200 selection:bg-cyan-500 selection:text-black">
+    <div className="bg-bg min-h-screen text-primary selection:bg-accent/20 selection:text-accent">
       <Navbar />
       <main>
         <Hero />

@@ -6,22 +6,23 @@ import { OrbitControls, PerspectiveCamera, ContactShadows } from "@react-three/d
 import * as THREE from "three";
 import { ParametricGeometry } from "three-stdlib";
 
-// ─── Constants ────────────────────────────────────────────────────────────────
+// ─── Constants ─────────────────────────────────────────────────────────────────
 const SUBDIV = 14;
 const HEAT_RADIUS = 18;
-const COLD = new THREE.Color("#0ea5e9");
-const HOT = new THREE.Color("#ef4444");
-const HOVER_COL = new THREE.Color("#fbbf24");
+// Light-theme palette: deep blue → amber
+const COLD = new THREE.Color("#1D4ED8");
+const HOT  = new THREE.Color("#B45309");
+const HOVER_COL = new THREE.Color("#111827");
 const _c = new THREE.Color();
 const _hit = new THREE.Vector3();
-const _PLANE = new THREE.Plane(new THREE.Vector3(0, 1, 0), -2); // world y=2
+const _PLANE = new THREE.Plane(new THREE.Vector3(0, 1, 0), -2);
 
 function heatCol(dist) {
   const t = Math.max(0, Math.min(1, 1 - dist / HEAT_RADIUS));
   return _c.copy(COLD).lerp(HOT, t * t);
 }
 
-// ─── Geometry function ────────────────────────────────────────────────────────
+// ─── Geometry ──────────────────────────────────────────────────────────────────
 function archFn(u, v, target) {
   const nx = (u - 0.5) * 2;
   target.set(
@@ -31,7 +32,7 @@ function archFn(u, v, target) {
   );
 }
 
-// ─── Structure ────────────────────────────────────────────────────────────────
+// ─── Structure ─────────────────────────────────────────────────────────────────
 function Structure({ loadRef, hovRef, nodeRefs, strutRefs }) {
   const { nodeArr, nodeVec, strutData } = useMemo(() => {
     const geo = new ParametricGeometry(archFn, SUBDIV, SUBDIV >> 1);
@@ -77,13 +78,13 @@ function Structure({ loadRef, hovRef, nodeRefs, strutRefs }) {
       if (i === hov) {
         m.material.color.set(HOVER_COL);
         m.material.emissive.set(HOVER_COL);
-        m.material.emissiveIntensity = 0.7;
+        m.material.emissiveIntensity = 0.2;
         m.scale.setScalar(1.6);
       } else {
         heatCol(v.distanceTo(lp));
         m.material.color.copy(_c);
-        m.material.emissive.copy(_c).multiplyScalar(0.4);
-        m.material.emissiveIntensity = 0.2;
+        m.material.emissive.copy(_c).multiplyScalar(0.15);
+        m.material.emissiveIntensity = 0.1;
         m.scale.setScalar(1.0);
       }
     });
@@ -93,7 +94,7 @@ function Structure({ loadRef, hovRef, nodeRefs, strutRefs }) {
       if (!m) return;
       heatCol(midVec.distanceTo(lp));
       m.material.color.copy(_c);
-      m.material.emissive.copy(_c).multiplyScalar(0.2);
+      m.material.emissive.copy(_c).multiplyScalar(0.1);
     });
   });
 
@@ -108,31 +109,20 @@ function Structure({ loadRef, hovRef, nodeRefs, strutRefs }) {
           onPointerLeave={e => { e.stopPropagation(); hovRef.current = -1; }}
         >
           <sphereGeometry args={[0.15, 8, 8]} />
-          <meshStandardMaterial
-            color={COLD} metalness={0.7} roughness={0.1}
-            emissive={COLD} emissiveIntensity={0.2}
-          />
+          <meshStandardMaterial color={COLD} metalness={0.5} roughness={0.2} emissive={COLD} emissiveIntensity={0.1} />
         </mesh>
       ))}
       {strutData.map(({ mid, quat, len }, i) => (
-        <mesh
-          key={`s${i}`}
-          position={mid}
-          quaternion={quat}
-          ref={el => { strutRefs.current[i] = el; }}
-        >
+        <mesh key={`s${i}`} position={mid} quaternion={quat} ref={el => { strutRefs.current[i] = el; }}>
           <cylinderGeometry args={[0.05, 0.05, len, 5]} />
-          <meshStandardMaterial
-            color={COLD} metalness={0.6} roughness={0.2}
-            emissive={COLD} emissiveIntensity={0.1}
-          />
+          <meshStandardMaterial color={COLD} metalness={0.4} roughness={0.3} emissive={COLD} emissiveIntensity={0.05} />
         </mesh>
       ))}
     </group>
   );
 }
 
-// ─── MainStructure ────────────────────────────────────────────────────────────
+// ─── MainStructure ─────────────────────────────────────────────────────────────
 function MainStructure() {
   const groupRef  = useRef();
   const loadRef   = useRef(new THREE.Vector3(999, 999, 999));
@@ -153,24 +143,18 @@ function MainStructure() {
 
   return (
     <group ref={groupRef} position={[0, -4, 0]}>
-      <Structure
-        loadRef={loadRef}
-        hovRef={hovRef}
-        nodeRefs={nodeRefs}
-        strutRefs={strutRefs}
-      />
+      <Structure loadRef={loadRef} hovRef={hovRef} nodeRefs={nodeRefs} strutRefs={strutRefs} />
     </group>
   );
 }
 
-// ─── Export ───────────────────────────────────────────────────────────────────
+// ─── Export ────────────────────────────────────────────────────────────────────
 export default function ThreeScene() {
   return (
     <div className="w-full h-full relative">
-      <div className="absolute bottom-4 left-4 z-10 font-mono text-[10px] text-slate-600 pointer-events-none select-none">
+      <div className="absolute bottom-3 left-3 z-10 font-mono text-[9px] text-muted pointer-events-none select-none">
         HOVER: force flow &nbsp;·&nbsp; DRAG: rotate
       </div>
-
       <Canvas gl={{ antialias: true, alpha: true }} dpr={[1, 2]}>
         <PerspectiveCamera makeDefault position={[15, 5, 15]} fov={70} />
         <OrbitControls
@@ -183,14 +167,12 @@ export default function ThreeScene() {
           autoRotate={true}
           autoRotateSpeed={0.5}
         />
-
-        <ambientLight intensity={1.5} />
-        <directionalLight position={[10, 15, 10]} intensity={2.5} castShadow />
-        <directionalLight position={[-10, 5, -5]} intensity={1.0} color="#dbeafe" />
-        <spotLight position={[0, 10, -10]} intensity={3} angle={0.5} penumbra={1} />
-
+        {/* Adjusted lighting for light background */}
+        <ambientLight intensity={2.5} color="#ffffff" />
+        <directionalLight position={[10, 15, 10]} intensity={1.5} castShadow color="#ffffff" />
+        <directionalLight position={[-10, 5, -5]} intensity={0.8} color="#e8f0fe" />
         <MainStructure />
-        <ContactShadows position={[0, -4, 0]} opacity={0.4} scale={40} blur={2.5} far={4} color="#64748b" />
+        <ContactShadows position={[0, -4, 0]} opacity={0.08} scale={40} blur={2} far={4} color="#9B9B96" />
       </Canvas>
     </div>
   );

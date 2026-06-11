@@ -1,20 +1,21 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-:root {
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 0, 0, 0;
-  --background-end-rgb: 0, 0, 0;
+@theme {
+  --color-bg:           #F5F4F0;
+  --color-card:         #FFFFFF;
+  --color-subtle:       #ECEAE5;
+  --color-primary:      #1A1A1A;
+  --color-secondary:    #6B6B66;
+  --color-muted:        #9B9B96;
+  --color-accent:       #1D4ED8;
+  --color-accent-light: #EFF6FF;
+  --color-line:         #E0DFDA;
+  --color-line-strong:  #CCCCC7;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-  /* 強制設定背景為黑色，避免載入時閃白光 */
-  background-color: #020617;
+  background-color: #F5F4F0;
+  color: #1A1A1A;
+  -webkit-font-smoothing: antialiased;
 }

@@ -2,78 +2,70 @@ import { getPostData, getSortedPostsData } from "@/app/lib/posts";
 import ReactMarkdown from "react-markdown";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { use } from "react"; // 🔥 1. 新增這行：引入 use
+import { use } from "react";
 import { getCategoryColor } from "@/app/lib/utils";
-
 import { notFound } from "next/navigation";
-
-// 🔥 1. 引入數學插件
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
-
-// 🔥 2. 引入 KaTeX 的 CSS (這行最重要，沒加的話公式會變亂碼)
 import "katex/dist/katex.min.css";
 
-// 產生靜態路徑 (這部分維持不變)
 export async function generateStaticParams() {
   const posts = getSortedPostsData();
-  return posts.map((post) => ({
-    slug: post.id,
-  }));
+  return posts.map(post => ({ slug: post.id }));
 }
 
-// 設定動態 Metadata
 export async function generateMetadata({ params }) {
-  // 🔥 2. 修正：params 是 Promise，必須加 await
   const { slug } = await params;
   const post = getPostData(slug);
   return { title: `${post.title} | BSC Blog` };
 }
 
-// 頁面本體
 export default function Post({ params }) {
-  // 🔥 3. 修正：使用 use() 來解包 params，取得 slug
   const { slug } = use(params);
-
-  // 現在 slug 有值了，再去抓資料就不會報錯 undefined.md
   const post = getPostData(slug);
-
-  if (!post) {
-    notFound();
-  }
+  if (!post) notFound();
 
   return (
-    <article className="py-24 px-6 max-w-3xl mx-auto min-h-screen">
-      <Link
-        href="/blog"
-        className="inline-flex items-center gap-2 text-slate-500 hover:text-cyan-400 mb-8 transition-colors font-mono text-sm"
-      >
-        <ArrowLeft size={16} />
-        BACK_TO_Blogs
-      </Link>
-
-      <header className="mb-12 border-b border-slate-800 pb-8">
-        <div className="flex gap-4 mb-4 text-xs font-mono">
-          <span className="text-cyan-500">{post.date}</span>
-          <span className="text-slate-600">/</span>
-          <span
-            className={`px-2 py-0.5 rounded border ${getCategoryColor(post.category)}`}
-          >
-            {post.category}
-          </span>
+    <article className="min-h-screen bg-bg">
+      {/* Nav */}
+      <nav className="sticky top-0 w-full bg-bg/90 backdrop-blur border-b border-line z-50">
+        <div className="max-w-3xl mx-auto px-6 h-14 flex items-center">
+          <Link href="/blog" className="flex items-center gap-2 text-sm font-mono text-accent hover:text-primary transition-colors">
+            <ArrowLeft size={14} /> Back
+          </Link>
         </div>
-        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">
-          {post.title}
-        </h1>
-      </header>
+      </nav>
 
-      <div className="prose prose-invert prose-cyan max-w-none prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-6 prose-p:leading-relaxed prose-pre:bg-slate-900 prose-pre:border prose-pre:border-slate-800">
-        <ReactMarkdown
-          remarkPlugins={[remarkMath]}
-          rehypePlugins={[rehypeKatex]}
-        >
-          {post.content}
-        </ReactMarkdown>
+      <div className="py-16 px-6 max-w-3xl mx-auto">
+        {/* Header */}
+        <header className="mb-12 pb-8 border-b border-line">
+          <div className="flex gap-3 mb-5 text-[11px] font-mono items-center">
+            <span className="text-accent">{post.date}</span>
+            <span className="text-muted">/</span>
+            <span className={`px-2 py-0.5 rounded border ${getCategoryColor(post.category)}`}>
+              {post.category}
+            </span>
+          </div>
+          <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3 leading-tight tracking-tight">
+            {post.title}
+          </h1>
+        </header>
+
+        {/* Body */}
+        <div className="prose prose-slate max-w-none
+          prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-primary
+          prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-5
+          prose-p:text-secondary prose-p:leading-relaxed prose-p:text-[16px]
+          prose-a:text-accent prose-a:no-underline hover:prose-a:underline
+          prose-strong:text-primary prose-strong:font-semibold
+          prose-code:text-accent prose-code:bg-accent-light prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-[13px] prose-code:font-mono prose-code:before:content-none prose-code:after:content-none
+          prose-pre:bg-subtle prose-pre:border prose-pre:border-line prose-pre:rounded-lg
+          prose-blockquote:border-l-accent prose-blockquote:text-secondary
+          prose-hr:border-line">
+          <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+            {post.content}
+          </ReactMarkdown>
+        </div>
       </div>
     </article>
   );
