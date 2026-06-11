@@ -256,7 +256,7 @@ export const projectsData = [
     demoVideo: ["https://youtu.be/iFNkS2v9hEE"],
     link: "https://youtu.be/iFNkS2v9hEE",
     github: null,
-    status: "PROTOTYPE",
+    status: "DEPLOYED",
     images: [
       {
         src: "/projects/InspectionSystem/Inspection-System-1.png",
