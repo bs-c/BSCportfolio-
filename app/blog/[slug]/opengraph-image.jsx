@@ -25,7 +25,7 @@ export default async function Image({ params }) {
           position: "relative",
         }}
       >
-        {/* Top: logo */}
+        {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <div
             style={{
@@ -44,15 +44,16 @@ export default async function Image({ params }) {
           </span>
         </div>
 
-        {/* Middle: post title */}
+        {/* Post title */}
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          {date && (
-            <div style={{ fontSize: "15px", color: "#9B9B96", fontFamily: "monospace", letterSpacing: "0.08em" }}>
+          {date ? (
+            <div style={{ display: "flex", fontSize: "15px", color: "#9B9B96", fontFamily: "monospace", letterSpacing: "0.08em" }}>
               {date}
             </div>
-          )}
+          ) : null}
           <div
             style={{
+              display: "flex",
               fontSize: titleFontSize, fontWeight: "800", color: "#1A1A1A",
               lineHeight: "1.1", letterSpacing: "-0.025em", maxWidth: "960px",
             }}
@@ -61,8 +62,8 @@ export default async function Image({ params }) {
           </div>
         </div>
 
-        {/* Bottom: URL */}
-        <div style={{ fontSize: "15px", color: "#9B9B96", fontFamily: "monospace", letterSpacing: "0.06em" }}>
+        {/* URL */}
+        <div style={{ display: "flex", fontSize: "15px", color: "#9B9B96", fontFamily: "monospace", letterSpacing: "0.06em" }}>
           bs-cportfolio.vercel.app/blog
         </div>
 

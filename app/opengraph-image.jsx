@@ -40,77 +40,30 @@ export default function Image() {
           </span>
         </div>
 
-        {/* Headline */}
-        <div
-          style={{
-            fontSize: "72px", fontWeight: "800", color: "#1A1A1A",
-            lineHeight: "1.05", marginBottom: "28px", letterSpacing: "-0.03em",
-          }}
-        >
-          Engineering Logic.
-          <br />
-          <span style={{ color: "#1D4ED8" }}>Digital Engineering.</span>
+        {/* Headline — flex column replaces <br /> */}
+        <div style={{ display: "flex", flexDirection: "column", marginBottom: "28px" }}>
+          <span style={{ fontSize: "72px", fontWeight: "800", color: "#1A1A1A", lineHeight: "1.1", letterSpacing: "-0.03em" }}>
+            Engineering Logic.
+          </span>
+          <span style={{ fontSize: "72px", fontWeight: "800", color: "#1D4ED8", lineHeight: "1.1", letterSpacing: "-0.03em" }}>
+            Digital Engineering.
+          </span>
         </div>
 
         {/* Tagline */}
-        <div style={{ fontSize: "24px", color: "#6B6B66", maxWidth: "680px", lineHeight: "1.5" }}>
+        <div style={{ display: "flex", fontSize: "24px", color: "#6B6B66", maxWidth: "680px" }}>
           Structural Engineer × Developer · Arup, Taiwan
         </div>
 
         {/* URL */}
         <div
           style={{
+            display: "flex",
             position: "absolute", bottom: "48px", left: "100px",
             fontSize: "15px", color: "#9B9B96", fontFamily: "monospace", letterSpacing: "0.06em",
           }}
         >
           bs-cportfolio.vercel.app
-        </div>
-
-        {/* Decorative nodes — structural arch silhouette */}
-        <div style={{ position: "absolute", right: "80px", top: "0", bottom: "0", display: "flex", alignItems: "center", opacity: "0.07" }}>
-          <div style={{ position: "relative", width: "320px", height: "320px" }}>
-            {/* Bottom chord */}
-            <div style={{ position: "absolute", bottom: "60px", left: "0", right: "0", height: "2px", background: "#1A1A1A" }} />
-            {/* Arch chord approximation with node dots */}
-            {[
-              { left: "0px",    bottom: "60px",  size: "10px" },
-              { left: "45px",   bottom: "128px", size: "8px"  },
-              { left: "100px",  bottom: "186px", size: "8px"  },
-              { left: "160px",  bottom: "210px", size: "10px" },
-              { left: "220px",  bottom: "186px", size: "8px"  },
-              { left: "275px",  bottom: "128px", size: "8px"  },
-              { left: "320px",  bottom: "60px",  size: "10px" },
-            ].map((node, i) => (
-              <div
-                key={i}
-                style={{
-                  position: "absolute",
-                  left: node.left, bottom: node.bottom,
-                  width: node.size, height: node.size,
-                  borderRadius: "50%", background: "#1D4ED8",
-                  transform: "translate(-50%, 50%)",
-                }}
-              />
-            ))}
-            {/* Verticals */}
-            {[
-              { left: "45px",  height: "68px",  bottom: "60px" },
-              { left: "100px", height: "126px", bottom: "60px" },
-              { left: "160px", height: "150px", bottom: "60px" },
-              { left: "220px", height: "126px", bottom: "60px" },
-              { left: "275px", height: "68px",  bottom: "60px" },
-            ].map((v, i) => (
-              <div
-                key={i}
-                style={{
-                  position: "absolute", left: v.left, bottom: v.bottom,
-                  width: "2px", height: v.height, background: "#1D4ED8",
-                  transform: "translateX(-50%)",
-                }}
-              />
-            ))}
-          </div>
         </div>
 
         {/* Accent line bottom */}
