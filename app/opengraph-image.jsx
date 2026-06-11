@@ -52,7 +52,7 @@ export default function Image() {
 
         {/* Tagline */}
         <div style={{ display: "flex", fontSize: "24px", color: "#6B6B66", maxWidth: "680px" }}>
-          Structural Engineer × Developer · Arup, Taiwan
+          Structural Engineer × Developer
         </div>
 
         {/* URL */}
