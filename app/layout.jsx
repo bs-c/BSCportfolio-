@@ -1,14 +1,32 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
-import TerminalWidget from "@/components/TerminalWidget";
 import { LanguageProvider } from "@/app/lib/LanguageContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "BSC's Portfolio | Engineer & Developer",
+  metadataBase: new URL("https://bs-cportfolio.vercel.app"),
+  title: {
+    default: "BSC's Portfolio | Structural Engineer & Developer",
+    template: "%s | BSC",
+  },
   description:
-    "Bridging the gap between Structural Engineering and Software Development. Specializing in BIM Automation, FEM Analysis, and Modern Digital Tech.",
+    "Structural Engineer at Arup Taiwan. Bridging Physical Structures and Digital Logic — building parametric tools, automation systems, and AI-enhanced engineering platforms.",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://bs-cportfolio.vercel.app",
+    siteName: "BSC Portfolio",
+    title: "BSC's Portfolio | Structural Engineer & Developer",
+    description:
+      "Structural Engineer at Arup Taiwan. Bridging Physical Structures and Digital Logic.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "BSC's Portfolio | Structural Engineer & Developer",
+    description:
+      "Structural Engineer at Arup Taiwan. Bridging Physical Structures and Digital Logic.",
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -21,7 +39,6 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <LanguageProvider>
           {children}
-          <TerminalWidget />
         </LanguageProvider>
       </body>
     </html>
